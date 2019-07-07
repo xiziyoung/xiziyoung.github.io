@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[mysql幻读]]></title>
+    <url>%2F2019%2F07%2F05%2Fmysql%E5%B9%BB%E8%AF%BB%2F</url>
+    <content type="text"><![CDATA[事务隔离级别mysql 有四级事务隔离级别: (图来自: &lt;高性能mysql一书&gt;) 解释: 脏读: 在事务T1中可以读取到事务T2中还没提交的更新; 不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读; 幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某一次的 select 操作得到的结果所表征的数据状态无法支撑后续的业务操作。更为具体一些：select 某记录是否存在，不存在，准备插入此记录，但执行 insert 时发现此记录已存在，无法插入，此时就发生了幻读。 幻读举例: 1.幻读的产生:下面用REPEATABLE-READ隔离级别举例说明 查看看事务隔离级别和测试表(innodb存储引擎的表)结构: 12345678910111213141516171819202122232425262728293031mysql&gt; select @@global.tx_isolation, @@tx_isolation;+-----------------------+-----------------+| @@global.tx_isolation | @@tx_isolation |+-----------------------+-----------------+| REPEATABLE-READ | REPEATABLE-READ |+-----------------------+-----------------+1 row in setmysql&gt; mysql&gt; desc test;+-------+--------------+------+-----+---------+----------------+| Field | Type | Null | Key | Default | Extra |+-------+--------------+------+-----+---------+----------------+| id | int(11) | NO | PRI | NULL | auto_increment || name | varchar(255) | NO | | NULL | |+-------+--------------+------+-----+---------+----------------+2 rows in set (1). 事务T1中123456789mysql&gt; begin;Query OK, 0 rows affectedmysql&gt; select * from test where id =1;Empty setmysql&gt; (2). 事务T2:1234567891011121314151617181920212223242526272829mysql&gt; begin;Query OK, 0 rows affectedmysql&gt; select * from test where id =1;Empty setmysql&gt; insert into test values (1, &apos;first&apos;);Query OK, 1 row affectedmysql&gt; commit;Query OK, 0 rows affectedmysql&gt; select * from test where id =1;+----+-------+| id | name |+----+-------+| 1 | first |+----+-------+1 row in set (3). 回到事务T1中:12345678910111213mysql&gt; select * from test where id =1;Empty setmysql&gt; insert into test values(1, &apos;second&apos;);1062 - Duplicate entry &apos;1&apos; for key &apos;PRIMARY&apos;mysql&gt; mysql&gt; select * from test where id =1;Empty set 我们可以看到在T2事务的中途干扰下, 导致T1事务出现了幻读 : 在事务T1中查询 id=1的数据不存在, 但指定id为1插入数据时又会抛出错误 Duplicate entry ‘1’ for key ‘PRIMARY’ , 然后我们在出现插入错误提示后, 在T1中查询id=1的数据还是不存在。 2.SERIALIZABLE防止幻读的方式因为在该隔离级别下, 会给读取到的每一条数据强制加锁 (数据行存在加 X锁, 不存在的加Gap Lock锁 ), 即记录存在与否，mysql 都会对记录应该对应的索引加锁，其他事务是无法再获得做操作的。 MySQL InnoDB支持三种行锁定方式： 行锁（Record Lock）:锁直接加在索引记录上面，锁住的是key。 间隙锁（Gap Lock）:锁定索引记录间隙，确保索引记录的间隙不变。间隙锁是针对事务隔离级别为可重复读或以上级别而已的。 Next-Key Lock ：行锁和间隙锁组合起来就叫Next-Key Lock。]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[test blog]]></title>
+    <url>%2F2019%2F07%2F04%2Ftest-blog%2F</url>
+    <content type="text"><![CDATA[Welcome to GitHub PagesYou can use the editor on GitHub to maintain and preview the content for your website in Markdown files. Whenever you commit to this repository, GitHub Pages will run Jekyll to rebuild the pages in your site, from the content in your Markdown files. MarkdownMarkdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for 123456789101112131415Syntax highlighted code block# Header 1## Header 2### Header 3- Bulleted- List1. Numbered2. List**Bold** and _Italic_ and `Code` text[Link](url) and ![Image](src) For more details see GitHub Flavored Markdown. Jekyll ThemesYour Pages site will use the layout and styles from the Jekyll theme you have selected in your repository settings. The name of this theme is saved in the Jekyll _config.yml configuration file. Support or ContactHaving trouble with Pages? Check out our documentation or contact support and we’ll help you sort it out.]]></content>
+      <categories>
+        <category>github</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[mysql死锁]]></title>
+    <url>%2F2018%2F07%2F06%2Fmysql%E6%AD%BB%E9%94%81%2F</url>
+    <content type="text"><![CDATA[mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能确保在给定时间里，只有一个用户能执行写入，并防止其他用户读取正在写入的同一资源。 (待补充: 锁力度,行锁,间隙锁等) 死锁: 死锁模拟表结构: 12345CREATE TABLE `test` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8; 事务一T1中: 12345678mysql&gt; START TRANSACTION;Query OK, 0 rows affectedmysql&gt; update `test` set `name`="T1" where `id`=1;Query OK, 1 row affectedRows matched: 1 Changed: 1 Warnings: 0mysql&gt; ​ 事务二T2中: 新的事务T2 12345678mysql&gt; START TRANSACTION;Query OK, 0 rows affectedmysql&gt; update `test` set `name`="T1" where `id`=3;Query OK, 1 row affectedRows matched: 1 Changed: 1 Warnings: 0mysql&gt; 事务T1: 事务T1也执行删除操作 12mysql&gt; update `test` set `name`=&quot;T1&quot; where `id`=3;---阻塞等待中,等待T2释放id=3记录的X锁 事务T2 123mysql&gt; update `test` set `name`=&quot;T2&quot; where `id`=1;1213 - Deadlock found when trying to get lock; try restarting transactionmysql&gt; 事务T2抛错, 事务T1继续执行: 123456mysql&gt; update `test` set `name`="T1" where `id`=3;Query OK, 1 row affectedRows matched: 1 Changed: 1 Warnings: 0mysql&gt; mysql&gt; commit;Query OK, 0 rows affected 发生死锁后，InnoDB会为对一个客户(此处为 事务T2)产生错误信息并释放锁。返回给客户的信息： 12Deadlock found when trying to get lock;try restarting transaction 所以，另一个客户(事务T1)可以正常执行任务。死锁结束。 日常注意:事务尽量简单化: 123456789101112131415 //各种其他可以不在事务中执行的操作,应该在事务外执行,例如其他的数据获取,数据处理,数据格式调整,其他耗时处理等等$this-&gt;beginTrans(); //在事务内, 尽量只集中处理事务该处理的sql部分 try &#123; $this-&gt;update(); //因为在事务中,处理这些,事务就会等待这些处理完了,再提交或者回滚,那样事务内的锁就会挂起太久, 容易导致死锁问题 $this-&gt;delete(); $this-&gt;commit(); &#125; catch (Exception $e) &#123; $this-&gt;rollBack(); throw new MessageException('操作失败', 0); &#125;]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+</search>
