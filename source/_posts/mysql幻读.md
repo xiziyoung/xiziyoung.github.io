@@ -37,7 +37,7 @@ tags:
 
 **下面用REPEATABLE-READ隔离级别举例说明**
 
-查看看事务隔离级别和测试表结构:
+查看看事务隔离级别和测试表(innodb存储引擎的表)结构:
 
 ```
 mysql> select @@global.tx_isolation, @@tx_isolation;
