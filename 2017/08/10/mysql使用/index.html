@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1.多个值的 IN 匹配语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_v">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql使用">
+<meta property="og:url" content="http://yoursite.com/2017/08/10/mysql使用/index.html">
+<meta property="og:site_name" content="xiziYoung">
+<meta property="og:description" content="1.多个值的 IN 匹配语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_v">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-09T16:31:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql使用">
+<meta name="twitter:description" content="1.多个值的 IN 匹配语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_v">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2017/08/10/mysql使用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mysql使用 | xiziYoung</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xiziYoung</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/10/mysql使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xiziYoung">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiziYoung">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mysql使用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-08-10 12:45:21" itemprop="dateCreated datePublished" datetime="2017-08-10T12:45:21+08:00">2017-08-10</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-10 00:31:38" itemprop="dateModified" datetime="2019-07-10T00:31:38+08:00">2019-07-10</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-多个值的-IN-匹配"><a href="#1-多个值的-IN-匹配" class="headerlink" title="1.多个值的 IN 匹配"></a>1.多个值的 IN 匹配</h2><p>语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )<br>语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_value, field2_value) );<br>完整举例:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Table structure for Employee</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`Employee`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`Employee`</span> (</span><br><span class="line">  <span class="string">`Id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`Name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`Salary`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`DepartmentId`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`Id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Records of Employee</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Employee`</span> <span class="keyword">VALUES</span> (<span class="string">'1'</span>, <span class="string">'Joe'</span>, <span class="string">'70000'</span>, <span class="string">'1'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Employee`</span> <span class="keyword">VALUES</span> (<span class="string">'2'</span>, <span class="string">'Henry'</span>, <span class="string">'80000'</span>, <span class="string">'2'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Employee`</span> <span class="keyword">VALUES</span> (<span class="string">'3'</span>, <span class="string">'Sam'</span>, <span class="string">'60000'</span>, <span class="string">'2'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Employee`</span> <span class="keyword">VALUES</span> (<span class="string">'4'</span>, <span class="string">'Max'</span>, <span class="string">'90000'</span>, <span class="string">'1'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Employee`</span> <span class="keyword">VALUES</span> (<span class="string">'5'</span>, <span class="string">'Tom'</span>, <span class="string">'90000'</span>, <span class="string">'1'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询语句:</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="string">`Name`</span> , <span class="string">`Salary`</span>, <span class="string">`DepartmentId`</span> <span class="keyword">FROM</span> <span class="string">`Employee`</span> <span class="keyword">where</span> (Salary,DepartmentId) <span class="keyword">in</span>((<span class="number">90000</span>,<span class="number">1</span>), (<span class="number">80000</span>,<span class="number">2</span>));</span><br><span class="line"><span class="comment">-- 等价于: </span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="string">`Name`</span> , <span class="string">`Salary`</span>, <span class="string">`DepartmentId`</span> <span class="keyword">FROM</span> <span class="string">`Employee`</span> </span><br><span class="line"><span class="keyword">where</span> (<span class="string">`DepartmentId`</span>, <span class="string">`Salary`</span>) <span class="keyword">in</span> (<span class="keyword">SELECT</span> <span class="string">`DepartmentId`</span>,<span class="keyword">MAX</span>(<span class="string">`Salary`</span>) <span class="keyword">as</span> Salary <span class="keyword">FROM</span> <span class="string">`Employee`</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="string">`DepartmentId`</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-字段加密"><a href="#2-字段加密" class="headerlink" title="2.字段加密"></a>2.字段加密</h2><p>常见的:<br>SELECT MD5(‘123’);<br>SELECT SHA(‘123’);<br>SELECT PASSWORD(‘123’);<br>MD5()：计算字符串的MD5校验和<br>SHA：计算字符串的SHA校验和<br>PASSWORD()：创建一个经过加密的密码字符串，适合于插入到MySQL的安全系<br>统。该加密过程不可逆，和unix密码加密过程使用不同的算法。主要用于MySQL的认证系统。<br>加密函数非常之多,官网:<a href="https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html</a> </p>
+<h3 id="2-1-AES-ENCRYPT-和-AES-DECRYPT-推荐"><a href="#2-1-AES-ENCRYPT-和-AES-DECRYPT-推荐" class="headerlink" title="2.1 AES_ENCRYPT 和 AES_DECRYPT (推荐)"></a>2.1 AES_ENCRYPT 和 AES_DECRYPT (推荐)</h3><p>使用AES算法解密/加密<br>其加密的结果最好使用blob类型存储;<br>语法: AES_ENCRYPT(‘要加密的值’, ‘token key’)<br>      AES_DECRYPT(‘被加密的字段’, ‘token key’)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`encrypt`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`email`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`email_e`</span> varbinary(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`phone`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`phone_e`</span> varbinary(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 首先设置用来加密的key值, 该变量在以下语句中使用</span></span><br><span class="line"><span class="keyword">SET</span> @<span class="keyword">key</span> = <span class="string">'D7DF5B64DF1181EF1D62D646A13AA860'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- (1)</span></span><br><span class="line"><span class="comment">-- 添加完整的数据, email_e和phone_e使用AES_ENCRYPT('value',key)加密</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`encrypt`</span> (<span class="keyword">id</span>,email,email_e,phone,phone_e) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">'123456@qq.com'</span>, <span class="keyword">AES_ENCRYPT</span>(<span class="string">'123456@qq.com'</span>, @<span class="keyword">key</span>), <span class="string">'12345678901'</span>, <span class="keyword">AES_ENCRYPT</span>(<span class="string">'12345678901'</span>, @<span class="keyword">key</span>));</span><br><span class="line"><span class="comment">-- 使用 AES_DECRYPT(field, key)来解密,查询</span></span><br><span class="line"><span class="keyword">SELECT</span> *,<span class="keyword">AES_DECRYPT</span>(email_e, @<span class="keyword">key</span>) <span class="keyword">as</span> eamil_value,<span class="keyword">AES_DECRYPT</span>(phone_e, @<span class="keyword">key</span>) <span class="keyword">as</span> phone_value <span class="keyword">FROM</span> <span class="string">`encrypt`</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span>;</span><br><span class="line"><span class="comment">-- 查询结果</span></span><br><span class="line">+<span class="comment">----+---------------+----------------+-------------+----------------+---------------+-------------+</span></span><br><span class="line">| id | email         | email_e        | phone       | phone_e        | eamil_value   | phone_value |</span><br><span class="line">+<span class="comment">----+---------------+----------------+-------------+----------------+---------------+-------------+</span></span><br><span class="line">|  1 | 123456@qq.com | 殰S婋帣??K%槠 | 12345678901 | 葡贇韚[qK》?x? | 123456@qq.com | 12345678901 |</span><br><span class="line">+<span class="comment">----+---------------+----------------+-------------+----------------+---------------+-------------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- (2)</span></span><br><span class="line"><span class="comment">-- 你还可以对key再次的转变一次, 例如使用UNHEX, 即AES_ENCRYPT('value',UNHEX(key))加密</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`encrypt`</span> (<span class="keyword">id</span>,email,phone) <span class="keyword">VALUES</span> (<span class="number">2</span>,<span class="string">'test@qq.com'</span>, <span class="string">'55555555555'</span>);</span><br><span class="line"><span class="keyword">UPDATE</span> <span class="string">`encrypt`</span> <span class="keyword">set</span>  <span class="string">`email_e`</span>= <span class="keyword">AES_ENCRYPT</span>(<span class="string">`email`</span>, <span class="keyword">UNHEX</span>(@<span class="keyword">key</span>)),<span class="string">`phone_e`</span>= <span class="keyword">AES_ENCRYPT</span>(<span class="string">`phone`</span>, <span class="keyword">UNHEX</span>(@<span class="keyword">key</span>)) <span class="keyword">WHERE</span> <span class="keyword">id</span> =<span class="number">2</span>;</span><br><span class="line"><span class="comment">-- 对应的查询</span></span><br><span class="line"><span class="keyword">SELECT</span> *,<span class="keyword">AES_DECRYPT</span>(email_e, <span class="keyword">UNHEX</span>(@<span class="keyword">key</span>)) <span class="keyword">as</span> eamil_value,<span class="keyword">AES_DECRYPT</span>(phone_e, <span class="keyword">UNHEX</span>(@<span class="keyword">key</span>)) <span class="keyword">as</span> phone_value <span class="keyword">FROM</span> <span class="string">`encrypt`</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">2</span>;</span><br><span class="line"><span class="comment">-- 查询结果</span></span><br><span class="line">+<span class="comment">----+-------------+-----------------+-------------+----------------+-------------+-------------+</span></span><br><span class="line">| id | email       | email_e         | phone       | phone_e        | eamil_value | phone_value |</span><br><span class="line">+<span class="comment">----+-------------+-----------------+-------------+----------------+-------------+-------------+</span></span><br><span class="line">|  2 | test@qq.com | O藬蕟L2爽?鷫? | 55555555555 | 科eV3X6?恢ss糉 | test@qq.com | 55555555555 |</span><br><span class="line">+<span class="comment">----+-------------+-----------------+-------------+----------------+-------------+-------------+</span></span><br></pre></td></tr></table></figure>
+
+<p>注意: php 的composer库 phpseclib/phpseclib 可以用来处理PKCS＃1（v2.1）RSA，DES，3DES，RC4，Rijndael，AES，Blowfish，Twofish，SSH-1，SSH-2， SFTP和X.509<br>故mysql的AES_ENCRYPT可以和php的这个库结合使用</p>
+<h3 id="2-2-ENCODE-和-DECODE"><a href="#2-2-ENCODE-和-DECODE" class="headerlink" title="2.2 ENCODE() 和 DECODE()"></a>2.2 ENCODE() 和 DECODE()</h3><p>ENCODE(‘需要编码字符串’, ‘token key’)<br>DECODE(‘被编码的字段’, ‘token key’)<br>该函数有两个参数：被加密或解密的字符串和作为加密或解密基础的密钥。<br>Encode结果是一个二进制字符串，以BLOB类型存储。加密程度相对比较弱</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 表结构同上</span></span><br><span class="line"><span class="keyword">SET</span> @<span class="keyword">key</span> = <span class="string">'D7DF5B64DF1181EF1D62D646A13AA860'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`encrypt`</span> (<span class="keyword">id</span>,email,email_e,phone,phone_e) <span class="keyword">VALUES</span> (<span class="number">5</span>,<span class="string">'new@qq.com'</span>, <span class="keyword">ENCODE</span>(<span class="string">'new@qq.com'</span>, @<span class="keyword">key</span>), <span class="string">'000000'</span>, <span class="keyword">ENCODE</span>(<span class="string">'000000'</span>, @<span class="keyword">key</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> *,<span class="keyword">DECODE</span>(email_e, @<span class="keyword">key</span>) <span class="keyword">as</span> eamil_value,<span class="keyword">DECODE</span>(phone_e, @<span class="keyword">key</span>) <span class="keyword">as</span> phone_value <span class="keyword">FROM</span> <span class="string">`encrypt`</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-case-when的使用"><a href="#3-case-when的使用" class="headerlink" title="3.case when的使用"></a>3.case when的使用</h2><h3 id="3-1-case-when-用于查询"><a href="#3-1-case-when-用于查询" class="headerlink" title="3.1 case when 用于查询:"></a>3.1 case when 用于查询:</h3><p>这里介绍三种使用方法:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Table structure for user</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`user`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`user`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`gender`</span> <span class="built_in">tinyint</span>(<span class="number">4</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'1'</span> <span class="keyword">COMMENT</span> <span class="string">'1代表男,2代表女'</span>,</span><br><span class="line">  <span class="string">`age`</span> <span class="built_in">tinyint</span>(<span class="number">4</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`country`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">7</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Records of user</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'1'</span>, <span class="string">'小明'</span>, <span class="string">'1'</span>, <span class="string">'20'</span>, <span class="string">'中国'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'2'</span>, <span class="string">'Tom'</span>, <span class="string">'1'</span>, <span class="string">'18'</span>, <span class="string">'USA'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'3'</span>, <span class="string">'Sam'</span>, <span class="string">'2'</span>, <span class="string">'50'</span>, <span class="string">'USA'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'4'</span>, <span class="string">'小华'</span>, <span class="string">'2'</span>, <span class="string">'22'</span>, <span class="string">'中国'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'5'</span>, <span class="string">'老张'</span>, <span class="string">'1'</span>, <span class="string">'70'</span>, <span class="string">'中国'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`user`</span> <span class="keyword">VALUES</span> (<span class="string">'6'</span>, <span class="string">'Joe'</span>, <span class="string">'1'</span>, <span class="string">'75'</span>, <span class="string">'USA'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- (1). CASE 字段1 WHEN 具体的值(不可为某个范围匹配) THEN 'value' ELSE 'valus' AS 字段别名,</span></span><br><span class="line"><span class="comment">--      CASE 字段2 WHEN 具体的值 THEN 'value' ELSE 'value' AS 字段别名,</span></span><br><span class="line"><span class="keyword">SELECT</span> *,</span><br><span class="line"><span class="keyword">CASE</span> <span class="string">`country`</span> <span class="keyword">WHEN</span> <span class="string">'中国'</span> <span class="keyword">THEN</span> <span class="string">'龙的传入'</span> <span class="keyword">ELSE</span> <span class="string">'外国人'</span>  <span class="keyword">END</span> <span class="keyword">AS</span> <span class="string">'背景'</span>,</span><br><span class="line"><span class="keyword">CASE</span> <span class="string">`gender`</span> <span class="keyword">WHEN</span> <span class="string">'1'</span> <span class="keyword">THEN</span> <span class="string">'男'</span> <span class="keyword">ELSE</span> <span class="string">'女'</span>  <span class="keyword">END</span> <span class="keyword">AS</span> <span class="string">'性别'</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user`</span>;</span><br><span class="line"><span class="comment">-- query result:</span></span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+------+</span></span><br><span class="line">| id | name | gender | age | country | 背景     | 性别 |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+------+</span></span><br><span class="line">|  1 | 小明 |      1 |  20 | 中国    | 龙的传入 | 男   |</span><br><span class="line">|  2 | Tom  |      1 |  18 | USA     | 外国人   | 男   |</span><br><span class="line">|  3 | Sam  |      2 |  50 | USA     | 外国人   | 女   |</span><br><span class="line">|  4 | 小华 |      2 |  22 | 中国    | 龙的传入 | 女   |</span><br><span class="line">|  5 | 老张 |      1 |  70 | 中国    | 龙的传入 | 男   |</span><br><span class="line">|  6 | Joe  |      1 |  75 | USA     | 外国人   | 男   |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+------+</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- (2).CASE WHEN 单个字段  这个可以对字段进行取范围,也可具体值</span></span><br><span class="line"><span class="keyword">SELECT</span> *,  </span><br><span class="line"><span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="string">`age`</span> &lt; <span class="number">30</span> <span class="keyword">THEN</span> <span class="string">'青年'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">`age`</span> <span class="keyword">BETWEEN</span> <span class="number">30</span> <span class="keyword">and</span> <span class="number">50</span> <span class="keyword">THEN</span> <span class="string">'中年'</span> </span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">`age`</span> = <span class="number">70</span> <span class="keyword">THEN</span> <span class="string">'古稀'</span> </span><br><span class="line"><span class="keyword">ELSE</span> <span class="string">'老年'</span>  <span class="keyword">END</span> <span class="keyword">AS</span> <span class="string">'年龄'</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user`</span>;</span><br><span class="line"><span class="comment">-- query result:</span></span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+------+</span></span><br><span class="line">| id | name | gender | age | country | 年龄 |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+------+</span></span><br><span class="line">|  1 | 小明 |      1 |  20 | 中国    | 青年 |</span><br><span class="line">|  2 | Tom  |      1 |  18 | USA     | 青年 |</span><br><span class="line">|  3 | Sam  |      2 |  50 | USA     | 中年 |</span><br><span class="line">|  4 | 小华 |      2 |  22 | 中国    | 青年 |</span><br><span class="line">|  5 | 老张 |      1 |  70 | 中国    | 古稀 |</span><br><span class="line">|  6 | Joe  |      1 |  75 | USA     | 老年 |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- (3)CASE WHEN 字段1,字段2，可以对多个字段进行替换</span></span><br><span class="line"><span class="keyword">SELECT</span> *,  </span><br><span class="line"><span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="string">`age`</span> &lt; <span class="number">30</span> <span class="keyword">THEN</span> <span class="string">'青年'</span></span><br><span class="line"><span class="keyword">WHEN</span> <span class="string">`country`</span> = <span class="string">'中国'</span> <span class="keyword">THEN</span> <span class="string">'龙的传入'</span> </span><br><span class="line"><span class="keyword">ELSE</span> <span class="string">'未知'</span>  <span class="keyword">END</span> <span class="keyword">AS</span> <span class="string">'备注'</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`user`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- query result:</span></span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+</span></span><br><span class="line">| id | name | gender | age | country | 备注     |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+</span></span><br><span class="line">|  1 | 小明 |      1 |  20 | 中国    | 青年     |</span><br><span class="line">|  2 | Tom  |      1 |  18 | USA     | 青年     |</span><br><span class="line">|  3 | Sam  |      2 |  50 | USA     | 未知     |</span><br><span class="line">|  4 | 小华 |      2 |  22 | 中国    | 青年     |</span><br><span class="line">|  5 | 老张 |      1 |  70 | 中国    | 龙的传入 |</span><br><span class="line">|  6 | Joe  |      1 |  75 | USA     | 未知     |</span><br><span class="line">+<span class="comment">----+------+--------+-----+---------+----------+</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-case-when-用于更新"><a href="#3-2-case-when-用于更新" class="headerlink" title="3.2 case when 用于更新:"></a>3.2 case when 用于更新:</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- (1).单个字段的更新示例:</span></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="string">`categories`</span> <span class="keyword">SET</span></span><br><span class="line">    <span class="string">`display_order`</span> = <span class="keyword">CASE</span> <span class="string">`id`</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="number">3</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">2</span> <span class="keyword">THEN</span> <span class="number">4</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">3</span> <span class="keyword">THEN</span> <span class="number">5</span></span><br><span class="line">        <span class="keyword">ELSE</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">END</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="string">`id`</span> <span class="keyword">IN</span> (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- (2).多个字段的更新示例:</span></span><br><span class="line"><span class="keyword">UPDATE</span> <span class="string">`categories`</span> <span class="keyword">SET</span> <span class="string">`author`</span> = <span class="string">'小明'</span>, <span class="string">`update_time`</span> = <span class="string">'2017-10-10'</span>,</span><br><span class="line">    <span class="string">`display_order`</span> = <span class="keyword">CASE</span> <span class="string">`id`</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="number">3</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">2</span> <span class="keyword">THEN</span> <span class="number">4</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">3</span> <span class="keyword">THEN</span> <span class="number">5</span></span><br><span class="line">        <span class="keyword">ELSE</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">END</span>,</span><br><span class="line">    <span class="string">`title`</span> = <span class="keyword">CASE</span> <span class="string">`id`</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="string">'New Title 1'</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">2</span> <span class="keyword">THEN</span> <span class="string">'New Title 2'</span></span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">3</span> <span class="keyword">THEN</span> <span class="string">'New Title 3'</span></span><br><span class="line">        <span class="keyword">ELSE</span> <span class="string">'null'</span></span><br><span class="line">    <span class="keyword">END</span></span><br><span class="line"><span class="keyword">WHERE</span> <span class="string">`id`</span> <span class="keyword">IN</span> (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>提醒: 在使用批量更新, 批量插入等方式的时候, 需要注意最终执行的sql语句的长度, 一般sql语句的长度默认最大 1M , 可通过mysql配置文件my.ini修改 max_allowed_packet(不推荐);<br>建议: 在批量插入/更新时, 若担心语句过程, 可以将要添加或者更新的数据 分成 多个批次执行; 例如插入10000条数据, 可以每次插入2000条, 分五次执行;</p>
+<h2 id="4-给查询结果增加递增的序号列"><a href="#4-给查询结果增加递增的序号列" class="headerlink" title="4.给查询结果增加递增的序号列"></a>4.给查询结果增加递增的序号列</h2><p>语法:<br>select (@rowNO := @rowNo+1) AS rowno,其他字段 from (select @rowNO:=0) as temp, <code>查询的表</code>….</p>
+<h3 id="4-1-示例"><a href="#4-1-示例" class="headerlink" title="4.1 示例:"></a>4.1 示例:</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Table structure for Scores</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`Scores`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`Scores`</span> (</span><br><span class="line">  <span class="string">`Id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`Score`</span> <span class="built_in">float</span>(<span class="number">5</span>,<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`Id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Records of Scores</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'1'</span>, <span class="string">'3.50'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'2'</span>, <span class="string">'3.65'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'3'</span>, <span class="string">'4.00'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'4'</span>, <span class="string">'3.85'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'5'</span>, <span class="string">'4.00'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'6'</span>, <span class="string">'3.65'</span>);</span><br><span class="line"><span class="comment">-- 查询</span></span><br><span class="line"><span class="keyword">select</span> (@rowNO := @rowNo+<span class="number">1</span>) <span class="keyword">AS</span> rowno,Score <span class="keyword">from</span> (<span class="keyword">select</span> @rowNO:=<span class="number">0</span>) <span class="keyword">as</span> temp, <span class="string">`Scores`</span>  <span class="keyword">ORDER</span> <span class="keyword">BY</span> Score <span class="keyword">desc</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- group by的自增序号</span></span><br><span class="line"><span class="comment">-- 错误:</span></span><br><span class="line"><span class="keyword">select</span> (@rowNO := @rowNo+<span class="number">1</span>) <span class="keyword">AS</span> rowno,Score <span class="keyword">from</span> (<span class="keyword">select</span> @rowNO:=<span class="number">0</span>) <span class="keyword">as</span> temp, <span class="string">`Scores`</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> Score  <span class="keyword">ORDER</span> <span class="keyword">BY</span> Score <span class="keyword">desc</span>;</span><br><span class="line"><span class="comment">-- 正确:</span></span><br><span class="line"><span class="keyword">select</span> (@rowNO := @rowNo+<span class="number">1</span>) <span class="keyword">AS</span> rowno,s.Score <span class="keyword">from</span> (<span class="keyword">select</span> @rowNO:=<span class="number">0</span>) <span class="keyword">as</span> temp, (<span class="keyword">SELECT</span> * <span class="keyword">from</span> <span class="string">`Scores`</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> Score  <span class="keyword">ORDER</span> <span class="keyword">BY</span> Score <span class="keyword">desc</span>) <span class="keyword">as</span> s;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-leetcode的一个题"><a href="#4-2-leetcode的一个题" class="headerlink" title="4.2 leetcode的一个题:"></a>4.2 leetcode的一个题:</h3><p>编写一个 SQL 查询来实现分数排名。如果两个分数相同，则两个分数排名（Rank）相同。请注意，平分后的下一个名次应该是下一个连续的整数值。换句话说，名次之间不应该有“间隔”。</p>
+<p>+—-+——-+<br>| Id | Score |<br>+—-+——-+<br>| 1  | 3.50  |<br>| 2  | 3.65  |<br>| 3  | 4.00  |<br>| 4  | 3.85  |<br>| 5  | 4.00  |<br>| 6  | 3.65  |<br>+—-+——-+<br>例如，根据上述给定的 Scores 表，你的查询应该返回（按分数从高到低排列）：</p>
+<p>+——-+——+<br>| Score | Rank |<br>+——-+——+<br>| 4.00  | 1    |<br>| 4.00  | 1    |<br>| 3.85  | 2    |<br>| 3.65  | 3    |<br>| 3.65  | 3    |<br>| 3.50  | 4    |<br>+——-+——+</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/rank-scores" target="_blank" rel="noopener">https://leetcode-cn.com/problems/rank-scores</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<p>题目分析:<br>先group by order by 拿到分数从高到底的排名,增加排名序号; 然后用分数表left join 按照分数高低排名即可</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Table structure for Scores</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`Scores`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`Scores`</span> (</span><br><span class="line">  <span class="string">`Id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`Score`</span> <span class="built_in">float</span>(<span class="number">5</span>,<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`Id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">0</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="comment">-- Records of Scores</span></span><br><span class="line"><span class="comment">-- ----------------------------</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'1'</span>, <span class="string">'3.50'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'2'</span>, <span class="string">'3.65'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'3'</span>, <span class="string">'4.00'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'4'</span>, <span class="string">'3.85'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'5'</span>, <span class="string">'4.00'</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`Scores`</span> <span class="keyword">VALUES</span> (<span class="string">'6'</span>, <span class="string">'3.65'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 最终查询语句:</span></span><br><span class="line"><span class="keyword">select</span> m.<span class="string">`Score`</span>,<span class="keyword">convert</span>(r.rowno, <span class="keyword">UNSIGNED</span>) <span class="keyword">as</span> <span class="keyword">Rank</span> <span class="keyword">from</span> Scores <span class="keyword">as</span> m <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> (<span class="keyword">select</span> (@rowNO:= @rowNo+<span class="number">1</span>) <span class="keyword">AS</span> rowno,s.Score <span class="keyword">from</span> (<span class="keyword">SELECT</span> *  <span class="keyword">FROM</span> <span class="string">`Scores`</span> <span class="keyword">group</span> <span class="keyword">by</span> <span class="string">`Score`</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="string">`Score`</span> <span class="keyword">desc</span> ) <span class="keyword">as</span> s, (<span class="keyword">select</span> @rowNO:=<span class="number">0</span>) <span class="keyword">as</span> temp</span><br><span class="line">) <span class="keyword">as</span> r <span class="keyword">on</span> m.<span class="string">`Score`</span>=r.<span class="string">`Score`</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> m.<span class="string">`Score`</span> <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-类型转换convert-首字符排序"><a href="#5-类型转换convert-首字符排序" class="headerlink" title="5.类型转换convert, 首字符排序"></a>5.类型转换convert, 首字符排序</h2><h3 id="5-1-语法说明"><a href="#5-1-语法说明" class="headerlink" title="5.1.语法说明:"></a>5.1.语法说明:</h3><p>MySQL 的CAST()和CONVERT()函数可用来获取一个类型的值，并产生另一个类型的值。两者具体的语法如下：<br>CAST(value as type);<br>CONVERT(value, type);<br>即: CAST(xxx AS 类型), CONVERT(xxx,类型)。<br>例如: SELECT CONVERT(‘23.00’, SIGNED);</p>
+<p>可以转换的类型是有限制的。这个类型可以是以下值其中的一个：<br>二进制，同带binary前缀的效果 : BINARY<br>字符型，可带参数 : CHAR()<br>日期 : DATE<br>时间: TIME<br>日期时间型 : DATETIME<br>浮点数 : DECIMAL<br>整数 : SIGNED<br>无符号整数 : UNSIGNED </p>
+<h3 id="5-2-以汉字首字符排序"><a href="#5-2-以汉字首字符排序" class="headerlink" title="5.2.以汉字首字符排序"></a>5.2.以汉字首字符排序</h3><p>name字段按照汉字正序 , 以name开头第一个字符来排序,依次是空格 0-9 a-z 字符 ,汉字首字拼音的首字母按照a-z来排序;<br>select DISTINCT <code>name</code> from <code>your_table</code> order by convert(<code>name</code> using gbk) asc limit 300;</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/06/mysql死锁/" rel="prev" title="mysql死锁">
+                mysql死锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="xiziYoung">
+            
+              <p class="site-author-name" itemprop="name">xiziYoung</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xiziyoung" title="GitHub &rarr; https://github.com/xiziyoung" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/xizimaozi@163.com" title="E-Mail &rarr; xizimaozi@163.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://example.com" title="http://example.com" rel="noopener" target="_blank">Title</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.baidu.com" title="https://www.baidu.com" rel="noopener" target="_blank">百度</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-多个值的-IN-匹配"><span class="nav-number">1.</span> <span class="nav-text">1.多个值的 IN 匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-字段加密"><span class="nav-number">2.</span> <span class="nav-text">2.字段加密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-AES-ENCRYPT-和-AES-DECRYPT-推荐"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 AES_ENCRYPT 和 AES_DECRYPT (推荐)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-ENCODE-和-DECODE"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 ENCODE() 和 DECODE()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-case-when的使用"><span class="nav-number">3.</span> <span class="nav-text">3.case when的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-case-when-用于查询"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 case when 用于查询:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-case-when-用于更新"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 case when 用于更新:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-给查询结果增加递增的序号列"><span class="nav-number">4.</span> <span class="nav-text">4.给查询结果增加递增的序号列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-示例"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 示例:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-leetcode的一个题"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 leetcode的一个题:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-类型转换convert-首字符排序"><span class="nav-number">5.</span> <span class="nav-text">5.类型转换convert, 首字符排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-语法说明"><span class="nav-number">5.1.</span> <span class="nav-text">5.1.语法说明:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-以汉字首字符排序"><span class="nav-number">5.2.</span> <span class="nav-text">5.2.以汉字首字符排序</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiziYoung</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

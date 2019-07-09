@@ -94,20 +94,13 @@
 
 
 
-  <meta name="description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
-<meta name="keywords" content="mysql">
-<meta property="og:type" content="article">
-<meta property="og:title" content="mysql死锁">
-<meta property="og:url" content="http://yoursite.com/2018/07/06/mysql死锁/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="xiziYoung">
+<meta property="og:url" content="http://yoursite.com/archives/2017/08/index.html">
 <meta property="og:site_name" content="xiziYoung">
-<meta property="og:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2018/07/06/mysql死锁/lock.png">
-<meta property="og:updated_time" content="2018-07-06T12:01:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mysql死锁">
-<meta name="twitter:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
-<meta name="twitter:image" content="http://yoursite.com/2018/07/06/mysql死锁/lock.png">
+<meta name="twitter:title" content="xiziYoung">
 
 
 
@@ -115,7 +108,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2018/07/06/mysql死锁/">
+  <link rel="canonical" href="http://yoursite.com/archives/2017/08/">
 
 
 
@@ -125,7 +118,7 @@
   };
 </script>
 
-  <title>mysql死锁 | xiziYoung</title>
+  <title>Archive | xiziYoung</title>
   
 
 
@@ -173,7 +166,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-archive">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,7 +220,7 @@
         
         
           
-          <li class="menu-item menu-item-archives">
+          <li class="menu-item menu-item-archives menu-item-active">
 
     
     
@@ -304,6 +297,28 @@
   
     
 
+    
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+    
+
+  
+
+
   
 
   
@@ -349,241 +364,78 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
 
-  
+      
+      <span class="archive-page-counter">
+        
+        
+        
+          
+        
+        Um..! 4 posts in total. Keep on posting.
+      </span>
+      
 
-  
-  
-  
+      
 
-  
+        
+        
+        
+
+        
+          
+          <div class="collection-title">
+            <h1 class="archive-year" id="archive-year-2017">2017</h1>
+          </div>
+        
+        
+
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/06/mysql死锁/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xiziYoung">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiziYoung">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+          <a class="post-title-link" href="/2017/08/10/mysql使用/" itemprop="url">
+            
+              <span itemprop="name">mysql使用</span>
+            
+          </a>
         
-          <h1 class="post-title" itemprop="name headline">mysql死锁
+      </h2>
 
-              
-            
-          </h1>
-        
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2017-08-10T12:45:21+08:00" content="2017-08-10">
+          08-10
+        </time>
+      </div>
 
-        <div class="post-meta">
-
-          
-          
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-07-06 18:59:17" itemprop="dateCreated datePublished" datetime="2018-07-06T18:59:17+08:00">2018-07-06</time>
-            </span>
-          
-
-          
-            
-
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-07-06 20:01:05" itemprop="dateModified" datetime="2018-07-06T20:01:05+08:00">2018-07-06</time>
-              </span>
-            
-          
-
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          <br>
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="mysql中的锁"><a href="#mysql中的锁" class="headerlink" title="mysql中的锁:"></a>mysql中的锁:</h2><p>在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。</p>
-<p>读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能确保在给定时间里，只有一个用户能执行写入，并防止其他用户读取正在写入的同一资源。</p>
-<p>(待补充: 锁力度,行锁,间隙锁等)</p>
-<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁:"></a>死锁:</h2><p><img src="lock.png" alt="img"></p>
-<h3 id="死锁模拟"><a href="#死锁模拟" class="headerlink" title="死锁模拟"></a>死锁模拟</h3><p>表结构:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">3</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br></pre></td></tr></table></figure>
-
-<p><strong>事务一T1中:</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line"></span><br><span class="line">mysql&gt; update `test` set `name`="T1" where `id`=1;</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<p><strong>事务二T2中:</strong></p>
-<p>新的事务T2</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line"></span><br><span class="line">mysql&gt; update `test` set `name`="T1" where `id`=3;</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-
-<p><strong>事务T1:</strong></p>
-<p>事务T1也执行删除操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update `test` set `name`=&quot;T1&quot; where `id`=3;</span><br><span class="line">---阻塞等待中,等待T2释放id=3记录的X锁</span><br></pre></td></tr></table></figure>
-
-<p><strong>事务T2</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update `test` set `name`=&quot;T2&quot; where `id`=1;</span><br><span class="line">1213 - Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
-
-<p>事务T2抛错,</p>
-<p><strong>事务T1继续执行:</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update `test` set `name`="T1" where `id`=3;</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; mysql&gt; commit;</span><br><span class="line">Query OK, 0 rows affected</span><br></pre></td></tr></table></figure>
-
-<p>发生死锁后，InnoDB会为对一个客户(此处为 事务T2)产生错误信息并释放锁。返回给客户的信息：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Deadlock found when trying to get <span class="keyword">lock</span>;</span><br><span class="line">try restarting transaction</span><br></pre></td></tr></table></figure>
-
-<p>所以，另一个客户(事务T1)可以正常执行任务。死锁结束。</p>
-<h2 id="日常注意"><a href="#日常注意" class="headerlink" title="日常注意:"></a>日常注意:</h2><p>事务尽量简单化:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">      <span class="comment">//各种其他可以不在事务中执行的操作,应该在事务外执行,例如其他的数据获取,数据处理,数据格式调整,其他耗时处理等等</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">$this</span>-&gt;beginTrans(); <span class="comment">//在事务内, 尽量只集中处理事务该处理的sql部分</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">$this</span>-&gt;update();</span><br><span class="line">          </span><br><span class="line">          <span class="comment">//因为在事务中,处理这些,事务就会等待这些处理完了,再提交或者回滚,那样事务内的锁就会挂起太久, 容易导致死锁问题</span></span><br><span class="line"></span><br><span class="line">          <span class="keyword">$this</span>-&gt;delete();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">$this</span>-&gt;commit();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</span><br><span class="line">          <span class="keyword">$this</span>-&gt;rollBack();</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> MessageException(<span class="string">'操作失败'</span>, <span class="number">0</span>);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/08/10/mysql使用/" rel="next" title="mysql使用">
-                <i class="fa fa-chevron-left"></i> mysql使用
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/04/test-blog/" rel="prev" title="test blog">
-                test blog <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
+
+      
+
+    </div>
   </div>
-
-
-          </div>
-          
+  
+  
+  
 
   
 
 
+
+          </div>
+          
 
         </div>
         
@@ -603,17 +455,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -746,23 +589,6 @@
       </div>
 
       
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql中的锁"><span class="nav-number">1.</span> <span class="nav-text">mysql中的锁:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">2.</span> <span class="nav-text">死锁:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁模拟"><span class="nav-number">2.1.</span> <span class="nav-text">死锁模拟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日常注意"><span class="nav-number">3.</span> <span class="nav-text">日常注意:</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
 
       
 
@@ -891,10 +717,6 @@
 
 
   
-  <script src="/js/scrollspy.js?v=7.2.0"></script>
-<script src="/js/post-details.js?v=7.2.0"></script>
-
-
 
   
 
@@ -910,8 +732,6 @@
 
   
 
-
-  
 
 
   
