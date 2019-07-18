@@ -234,6 +234,12 @@ WHERE `id` IN (1,2,3)
 ## 4.给查询结果增加递增的序号列
 语法:
 select (@rowNO := @rowNo+1) AS rowno,其他字段 from (select @rowNO:=0) as temp, `查询的表`....
+关于 := 说明
+```text
+Unlike =, the := operator is never interpreted as a comparison operator. This means you can use := in any valid SQL statement (not just in SET statements) to assign a value to a variable.
+
+```
+参考: https://dev.mysql.com/doc/refman/8.0/en/assignment-operators.html#operator_assign-value
 ### 4.1 示例:
 ```sql
 -- ----------------------------
