@@ -79,7 +79,7 @@ SELECT *,AES_DECRYPT(email_e, @key) as eamil_value,AES_DECRYPT(phone_e, @key) as
 +----+---------------+----------------+-------------+----------------+---------------+-------------+
 | id | email         | email_e        | phone       | phone_e        | eamil_value   | phone_value |
 +----+---------------+----------------+-------------+----------------+---------------+-------------+
-|  1 | 123456@qq.com | 殰S婋帣??K%槠 | 12345678901 | 葡贇韚[qK》?x? | 123456@qq.com | 12345678901 |
+|  1 | 123456@qq.com |    一些乱码     | 12345678901 |    一些乱码     | 123456@qq.com | 12345678901 |
 +----+---------------+----------------+-------------+----------------+---------------+-------------+
 
 -- (2)
@@ -92,11 +92,12 @@ SELECT *,AES_DECRYPT(email_e, UNHEX(@key)) as eamil_value,AES_DECRYPT(phone_e, U
 +----+-------------+-----------------+-------------+----------------+-------------+-------------+
 | id | email       | email_e         | phone       | phone_e        | eamil_value | phone_value |
 +----+-------------+-----------------+-------------+----------------+-------------+-------------+
-|  2 | test@qq.com | O藬蕟L2爽?鷫? | 55555555555 | 科eV3X6?恢ss糉 | test@qq.com | 55555555555 |
+|  2 | test@qq.com | 一些乱码         | 55555555555 |    一些乱码     | test@qq.com | 55555555555 |
 +----+-------------+-----------------+-------------+----------------+-------------+-------------+
 
 ```
-注意: php 的composer库 phpseclib/phpseclib 可以用来处理PKCS＃1（v2.1）RSA，DES，3DES，RC4，Rijndael，AES，Blowfish，Twofish，SSH-1，SSH-2， SFTP和X.509
+注: 上面的sql查询中的email_e和phone_e原来的乱码会影响到本博客hexo-next的搜索功能加载不了,故用正常字符描述...
+**tips:** php 的composer库 phpseclib/phpseclib 可以用来处理PKCS＃1（v2.1）RSA，DES，3DES，RC4，Rijndael，AES，Blowfish，Twofish，SSH-1，SSH-2， SFTP和X.509
 故mysql的AES_ENCRYPT可以和php的这个库结合使用
 
 ### 2.2 ENCODE() 和 DECODE()

@@ -81,7 +81,7 @@ deploy:
   type: git
   repo: https://github.com/xiziyoung/xiziyoung.github.io.git
   branch: master
-  message: deploymen
+  message: update
   name: xiziyoung
   email: xizimaozi@163.com
 
