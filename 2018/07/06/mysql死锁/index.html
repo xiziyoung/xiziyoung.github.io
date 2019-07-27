@@ -94,19 +94,19 @@
 
 
 
-  <meta name="description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
+  <meta name="description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。     读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql死锁">
 <meta property="og:url" content="http://yoursite.com/2018/07/06/mysql死锁/index.html">
 <meta property="og:site_name" content="xiziYoung">
-<meta property="og:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
+<meta property="og:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。     读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/07/06/mysql死锁/lock.png">
 <meta property="og:updated_time" content="2018-07-06T12:01:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql死锁">
-<meta name="twitter:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。 读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能">
+<meta name="twitter:description" content="mysql中的锁:在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。     读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这">
 <meta name="twitter:image" content="http://yoursite.com/2018/07/06/mysql死锁/lock.png">
 
 
@@ -475,11 +475,11 @@
       
 
       
-        <h2 id="mysql中的锁"><a href="#mysql中的锁" class="headerlink" title="mysql中的锁:"></a>mysql中的锁:</h2><p>在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。</p>
-<p>读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能确保在给定时间里，只有一个用户能执行写入，并防止其他用户读取正在写入的同一资源。</p>
-<p>(待补充: 锁力度,行锁,间隙锁等)</p>
+        <h2 id="mysql中的锁"><a href="#mysql中的锁" class="headerlink" title="mysql中的锁:"></a>mysql中的锁:</h2><p>在MySQL中的锁分两大类，一种是读锁，一种是写锁，读锁（read lock）也可以称为共享锁（shared lock），写锁（write lock）也通常称为排它锁（exclusive lock）。    </p>
+<p>读锁是共享的，或者说是相互不阻塞的。多个客户在同一时刻可以同时读取一个资源，且互不干扰。写锁则是排他的，就是说一个写锁会阻塞其他的写锁和读锁，这是出于安全策略的考虑，只有这样，才能确保在给定时间里，只有一个用户能执行写入，并防止其他用户读取正在写入的同一资源。  </p>
+<p>(待补充: 锁力度,行锁,间隙锁等)  </p>
 <h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁:"></a>死锁:</h2><p><img src="lock.png" alt="img"></p>
-<h3 id="死锁模拟"><a href="#死锁模拟" class="headerlink" title="死锁模拟"></a>死锁模拟</h3><p>表结构:</p>
+<h3 id="死锁模拟"><a href="#死锁模拟" class="headerlink" title="死锁模拟"></a>死锁模拟</h3><p>表结构:    </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">3</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br></pre></td></tr></table></figure>
 
 <p><strong>事务一T1中:</strong></p>
@@ -487,11 +487,11 @@
 
 <p>​    </p>
 <p><strong>事务二T2中:</strong></p>
-<p>新的事务T2</p>
+<p>新的事务T2  </p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line"></span><br><span class="line">mysql&gt; update `test` set `name`="T1" where `id`=3;</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
 
 <p><strong>事务T1:</strong></p>
-<p>事务T1也执行删除操作</p>
+<p>事务T1也执行删除操作 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update `test` set `name`=&quot;T1&quot; where `id`=3;</span><br><span class="line">---阻塞等待中,等待T2释放id=3记录的X锁</span><br></pre></td></tr></table></figure>
 
 <p><strong>事务T2</strong></p>
@@ -501,10 +501,10 @@
 <p><strong>事务T1继续执行:</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update `test` set `name`="T1" where `id`=3;</span><br><span class="line">Query OK, 1 row affected</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; mysql&gt; commit;</span><br><span class="line">Query OK, 0 rows affected</span><br></pre></td></tr></table></figure>
 
-<p>发生死锁后，InnoDB会为对一个客户(此处为 事务T2)产生错误信息并释放锁。返回给客户的信息：</p>
+<p>发生死锁后，InnoDB会为对一个客户(此处为 事务T2)产生错误信息并释放锁。返回给客户的信息：   </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Deadlock found when trying to get <span class="keyword">lock</span>;</span><br><span class="line">try restarting transaction</span><br></pre></td></tr></table></figure>
 
-<p>所以，另一个客户(事务T1)可以正常执行任务。死锁结束。</p>
+<p>所以，另一个客户(事务T1)可以正常执行任务。死锁结束。    </p>
 <h2 id="日常注意"><a href="#日常注意" class="headerlink" title="日常注意:"></a>日常注意:</h2><p>事务尽量简单化:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">      <span class="comment">//各种其他可以不在事务中执行的操作,应该在事务外执行,例如其他的数据获取,数据处理,数据格式调整,其他耗时处理等等</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">$this</span>-&gt;beginTrans(); <span class="comment">//在事务内, 尽量只集中处理事务该处理的sql部分</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">$this</span>-&gt;update();</span><br><span class="line">          </span><br><span class="line">          <span class="comment">//因为在事务中,处理这些,事务就会等待这些处理完了,再提交或者回滚,那样事务内的锁就会挂起太久, 容易导致死锁问题</span></span><br><span class="line"></span><br><span class="line">          <span class="keyword">$this</span>-&gt;delete();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">$this</span>-&gt;commit();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</span><br><span class="line">          <span class="keyword">$this</span>-&gt;rollBack();</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> MessageException(<span class="string">'操作失败'</span>, <span class="number">0</span>);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
 
@@ -939,7 +939,7 @@
     admin: ['xiziyoung'],
     id: md5(location.pathname),
     
-      language: 'zh-CN',
+      language: window.navigator.language || window.navigator.userLanguage,
     
     distractionFreeMode: 'true'
   });

@@ -94,20 +94,20 @@
 
 
 
-  <meta name="description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;   不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某一次">
+  <meta name="description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;     不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql幻读">
 <meta property="og:url" content="http://yoursite.com/2019/07/05/mysql幻读/index.html">
 <meta property="og:site_name" content="xiziYoung">
-<meta property="og:description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;   不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某一次">
+<meta property="og:description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;     不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/07/05/mysql幻读/509727203.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/05/mysql幻读/510092765.png">
-<meta property="og:updated_time" content="2019-07-06T12:05:03.000Z">
+<meta property="og:updated_time" content="2019-07-27T17:02:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql幻读">
-<meta name="twitter:description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;   不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某一次">
+<meta name="twitter:description" content="事务隔离级别mysql 有四级事务隔离级别:  (图来自: &amp;lt;高性能mysql一书&amp;gt;) 解释:  脏读: 在事务T1中可以读取到事务T2中还没提交的更新;     不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;   幻读: 幻读，并不是指在同一事务中执行两次同样的sql语句获取到的结果集不同，幻读侧重的方面是某">
 <meta name="twitter:image" content="http://yoursite.com/2019/07/05/mysql幻读/509727203.png">
 
 
@@ -424,7 +424,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-06 20:05:03" itemprop="dateModified" datetime="2019-07-06T20:05:03+08:00">2019-07-06</time>
+                <time title="Modified: 2019-07-28 01:02:44" itemprop="dateModified" datetime="2019-07-28T01:02:44+08:00">2019-07-28</time>
               </span>
             
           
@@ -481,7 +481,7 @@
 <p>(图来自: &lt;高性能mysql一书&gt;)</p>
 <p><strong>解释:</strong></p>
 <ul>
-<li>脏读: 在事务T1中可以读取到事务T2中还没提交的更新;</li>
+<li>脏读: 在事务T1中可以读取到事务T2中还没提交的更新;  </li>
 </ul>
 <ul>
 <li>不可重复读: 事务T1能够读取到事务T2提交后的更新, 这将导致事务T1在T2提交前后读取到的数据不一样, 即不可重复读;</li>
@@ -491,7 +491,7 @@
 </ul>
 <p><strong>幻读举例:</strong></p>
 <h4 id="1-幻读的产生"><a href="#1-幻读的产生" class="headerlink" title="1.幻读的产生:"></a>1.幻读的产生:</h4><p><strong>下面用REPEATABLE-READ隔离级别举例说明</strong></p>
-<p>查看看事务隔离级别和测试表(innodb存储引擎的表)结构:</p>
+<p>查看看事务隔离级别和测试表(innodb存储引擎的表)结构:  </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@global.tx_isolation, @@tx_isolation;</span><br><span class="line"></span><br><span class="line">+-----------------------+-----------------+</span><br><span class="line"></span><br><span class="line">| @@global.tx_isolation | @@tx_isolation |</span><br><span class="line"></span><br><span class="line">+-----------------------+-----------------+</span><br><span class="line"></span><br><span class="line">| REPEATABLE-READ | REPEATABLE-READ |</span><br><span class="line"></span><br><span class="line">+-----------------------+-----------------+</span><br><span class="line"></span><br><span class="line">1 row in set</span><br><span class="line"></span><br><span class="line">mysql&gt; </span><br><span class="line"></span><br><span class="line">mysql&gt; desc test;</span><br><span class="line"></span><br><span class="line">+-------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">| Field | Type | Null | Key | Default | Extra |</span><br><span class="line"></span><br><span class="line">+-------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">| id | int(11) | NO | PRI | NULL | auto_increment |</span><br><span class="line"></span><br><span class="line">| name | varchar(255) | NO | | NULL | |</span><br><span class="line"></span><br><span class="line">+-------+--------------+------+-----+---------+----------------+</span><br><span class="line"></span><br><span class="line">2 rows in set</span><br></pre></td></tr></table></figure>
 
 <h5 id="1-事务T1中"><a href="#1-事务T1中" class="headerlink" title="(1). 事务T1中"></a>(1). 事务T1中</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; begin;</span><br><span class="line"></span><br><span class="line">Query OK, 0 rows affected</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test where id =1;</span><br><span class="line"></span><br><span class="line">Empty set</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
@@ -943,7 +943,7 @@
     admin: ['xiziyoung'],
     id: md5(location.pathname),
     
-      language: 'zh-CN',
+      language: window.navigator.language || window.navigator.userLanguage,
     
     distractionFreeMode: 'true'
   });

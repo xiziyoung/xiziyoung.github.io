@@ -767,7 +767,7 @@
     admin: ['xiziyoung'],
     id: md5(location.pathname),
     
-      language: 'zh-CN',
+      language: window.navigator.language || window.navigator.userLanguage,
     
     distractionFreeMode: 'true'
   });
