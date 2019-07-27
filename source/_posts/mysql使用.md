@@ -6,10 +6,10 @@ date: 2017-8-10 12:45:21
 tags:
 - mysql
 ---
-## 1.多个值的 IN 匹配
-语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )
+## 1.多个值的 IN 匹配     
+语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )   
 语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_value, field2_value) );
-完整举例:
+完整举例:   
 ```sql
 -- ----------------------------
 -- Table structure for Employee
@@ -42,21 +42,21 @@ where (`DepartmentId`, `Salary`) in (SELECT `DepartmentId`,MAX(`Salary`) as Sala
 ```
 
 ## 2.字段加密
-常见的:
-SELECT MD5('123');
-SELECT SHA('123');
-SELECT PASSWORD('123');
-MD5()：计算字符串的MD5校验和
-SHA：计算字符串的SHA校验和
-PASSWORD()：创建一个经过加密的密码字符串，适合于插入到MySQL的安全系
-统。该加密过程不可逆，和unix密码加密过程使用不同的算法。主要用于MySQL的认证系统。
-加密函数非常之多,官网:https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html 
+常见的:    
+SELECT MD5('123');  
+SELECT SHA('123');  
+SELECT PASSWORD('123');     
+MD5()：计算字符串的MD5校验和      
+SHA：计算字符串的SHA校验和    
+PASSWORD()：创建一个经过加密的密码字符串，适合于插入到MySQL的安全系  
+统。该加密过程不可逆，和unix密码加密过程使用不同的算法。主要用于MySQL的认证系统。   
+加密函数非常之多,官网:https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html   
 
 ### 2.1 AES_ENCRYPT 和 AES_DECRYPT (推荐)
-使用AES算法解密/加密
-其加密的结果最好使用blob类型存储;
-语法: AES_ENCRYPT('要加密的值', 'token key')
-      AES_DECRYPT('被加密的字段', 'token key')
+使用AES算法解密/加密    
+其加密的结果最好使用blob类型存储; 
+语法: AES_ENCRYPT('要加密的值', 'token key')       
+      AES_DECRYPT('被加密的字段', 'token key')        
 ```sql
 CREATE TABLE `encrypt` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -73,9 +73,9 @@ SET @key = 'D7DF5B64DF1181EF1D62D646A13AA860';
 -- (1)
 -- 添加完整的数据, email_e和phone_e使用AES_ENCRYPT('value',key)加密
 INSERT INTO `encrypt` (id,email,email_e,phone,phone_e) VALUES (1,'123456@qq.com', AES_ENCRYPT('123456@qq.com', @key), '12345678901', AES_ENCRYPT('12345678901', @key));
--- 使用 AES_DECRYPT(field, key)来解密,查询
+-- 使用 AES_DECRYPT(field, key)来解密,查询   
 SELECT *,AES_DECRYPT(email_e, @key) as eamil_value,AES_DECRYPT(phone_e, @key) as phone_value FROM `encrypt` where id=1;
--- 查询结果
+-- 查询结果   
 +----+---------------+----------------+-------------+----------------+---------------+-------------+
 | id | email         | email_e        | phone       | phone_e        | eamil_value   | phone_value |
 +----+---------------+----------------+-------------+----------------+---------------+-------------+
@@ -96,15 +96,15 @@ SELECT *,AES_DECRYPT(email_e, UNHEX(@key)) as eamil_value,AES_DECRYPT(phone_e, U
 +----+-------------+-----------------+-------------+----------------+-------------+-------------+
 
 ```
-注: 上面的sql查询中的email_e和phone_e原来的乱码会影响到本博客hexo-next的搜索功能加载不了,故用正常字符描述...
-**tips:** php 的composer库 phpseclib/phpseclib 可以用来处理PKCS＃1（v2.1）RSA，DES，3DES，RC4，Rijndael，AES，Blowfish，Twofish，SSH-1，SSH-2， SFTP和X.509
-故mysql的AES_ENCRYPT可以和php的这个库结合使用
+注: 上面的sql查询中的email_e和phone_e原来的乱码会影响到本博客hexo-next的搜索功能加载不了,故用正常字符描述...      
+**tips:** php 的composer库 phpseclib/phpseclib 可以用来处理PKCS＃1（v2.1）RSA，DES，3DES，RC4，Rijndael，AES，Blowfish，Twofish，SSH-1，SSH-2， SFTP和X.509           
+故mysql的AES_ENCRYPT可以和php的这个库结合使用              
 
-### 2.2 ENCODE() 和 DECODE()
-ENCODE('需要编码字符串', 'token key')
-DECODE('被编码的字段', 'token key')
-该函数有两个参数：被加密或解密的字符串和作为加密或解密基础的密钥。
-Encode结果是一个二进制字符串，以BLOB类型存储。加密程度相对比较弱
+### 2.2 ENCODE() 和 DECODE()     
+ENCODE('需要编码字符串', 'token key')          
+DECODE('被编码的字段', 'token key')       
+该函数有两个参数：被加密或解密的字符串和作为加密或解密基础的密钥。   
+Encode结果是一个二进制字符串，以BLOB类型存储。加密程度相对比较弱   
 ```sql
 -- 表结构同上
 SET @key = 'D7DF5B64DF1181EF1D62D646A13AA860';
@@ -114,9 +114,9 @@ INSERT INTO `encrypt` (id,email,email_e,phone,phone_e) VALUES (5,'new@qq.com', E
 SELECT *,DECODE(email_e, @key) as eamil_value,DECODE(phone_e, @key) as phone_value FROM `encrypt` where id=5;
 ```
 
-## 3.case when的使用
-### 3.1 case when 用于查询:
-这里介绍三种使用方法:
+## 3.case when的使用   
+### 3.1 case when 用于查询: 
+这里介绍三种使用方法: 
 ```sql
 -- ----------------------------
 -- Table structure for user
@@ -228,20 +228,20 @@ UPDATE `categories` SET `author` = '小明', `update_time` = '2017-10-10',
     END
 WHERE `id` IN (1,2,3)
 ```
-提醒: 在使用批量更新, 批量插入等方式的时候, 需要注意最终执行的sql语句的长度, 一般sql语句的长度默认最大 1M , 可通过mysql配置文件my.ini修改 max_allowed_packet(不推荐);
-建议: 在批量插入/更新时, 若担心语句过程, 可以将要添加或者更新的数据 分成 多个批次执行; 例如插入10000条数据, 可以每次插入2000条, 分五次执行;
+提醒: 在使用批量更新, 批量插入等方式的时候, 需要注意最终执行的sql语句的长度, 一般sql语句的长度默认最大 1M , 可通过mysql配置文件my.ini修改 max_allowed_packet(不推荐);       
+建议: 在批量插入/更新时, 若担心语句过程, 可以将要添加或者更新的数据 分成 多个批次执行; 例如插入10000条数据, 可以每次插入2000条, 分五次执行;      
 
 
-## 4.给查询结果增加递增的序号列
-语法:
-select (@rowNO := @rowNo+1) AS rowno,其他字段 from (select @rowNO:=0) as temp, `查询的表`....
-关于 := 说明
+## 4.给查询结果增加递增的序号列  
+语法:     
+select (@rowNO := @rowNo+1) AS rowno,其他字段 from (select @rowNO:=0) as temp, `查询的表`....       
+关于 := 说明        
 ```text
 Unlike =, the := operator is never interpreted as a comparison operator. This means you can use := in any valid SQL statement (not just in SET statements) to assign a value to a variable.
 
-```
-参考: https://dev.mysql.com/doc/refman/8.0/en/assignment-operators.html#operator_assign-value
-### 4.1 示例:
+``` 
+参考: https://dev.mysql.com/doc/refman/8.0/en/assignment-operators.html#operator_assign-value     
+### 4.1 示例:     
 ```sql
 -- ----------------------------
 -- Table structure for Scores
@@ -272,8 +272,8 @@ select (@rowNO := @rowNo+1) AS rowno,Score from (select @rowNO:=0) as temp, `Sco
 select (@rowNO := @rowNo+1) AS rowno,s.Score from (select @rowNO:=0) as temp, (SELECT * from `Scores` GROUP BY Score  ORDER BY Score desc) as s;
 ```
 
-### 4.2 leetcode的一个题:
-编写一个 SQL 查询来实现分数排名。如果两个分数相同，则两个分数排名（Rank）相同。请注意，平分后的下一个名次应该是下一个连续的整数值。换句话说，名次之间不应该有“间隔”。
+### 4.2 leetcode的一个题:       
+编写一个 SQL 查询来实现分数排名。如果两个分数相同，则两个分数排名（Rank）相同。请注意，平分后的下一个名次应该是下一个连续的整数值。换句话说，名次之间不应该有“间隔”。        
 
 +----+-------+
 | Id | Score |
@@ -285,7 +285,7 @@ select (@rowNO := @rowNo+1) AS rowno,s.Score from (select @rowNO:=0) as temp, (S
 | 5  | 4.00  |
 | 6  | 3.65  |
 +----+-------+
-例如，根据上述给定的 Scores 表，你的查询应该返回（按分数从高到低排列）：
+例如，根据上述给定的 Scores 表，你的查询应该返回（按分数从高到低排列）：        
 
 +-------+------+
 | Score | Rank |
@@ -298,12 +298,12 @@ select (@rowNO := @rowNo+1) AS rowno,s.Score from (select @rowNO:=0) as temp, (S
 | 3.50  | 4    |
 +-------+------+
 
-来源：力扣（LeetCode）
-链接：https://leetcode-cn.com/problems/rank-scores
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+来源：力扣（LeetCode）     
+链接：https://leetcode-cn.com/problems/rank-scores     
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。      
 
-题目分析:
-先group by order by 拿到分数从高到底的排名,增加排名序号; 然后用分数表left join 按照分数高低排名即可
+题目分析:       
+先group by order by 拿到分数从高到底的排名,增加排名序号; 然后用分数表left join 按照分数高低排名即可       
 
 ```sql
 -- ----------------------------
@@ -332,25 +332,25 @@ select m.`Score`,convert(r.rowno, UNSIGNED) as Rank from Scores as m LEFT JOIN (
 ```
 
 
-## 5.类型转换convert, 首字符排序
-### 5.1.语法说明:
-MySQL 的CAST()和CONVERT()函数可用来获取一个类型的值，并产生另一个类型的值。两者具体的语法如下：
-CAST(value as type);
-CONVERT(value, type);
-即: CAST(xxx AS 类型), CONVERT(xxx,类型)。
-例如: SELECT CONVERT('23.00', SIGNED);
+## 5.类型转换convert, 首字符排序 
+### 5.1.语法说明:   
+MySQL 的CAST()和CONVERT()函数可用来获取一个类型的值，并产生另一个类型的值。两者具体的语法如下：  
+CAST(value as type);    
+CONVERT(value, type);   
+即: CAST(xxx AS 类型), CONVERT(xxx,类型)。    
+例如: SELECT CONVERT('23.00', SIGNED);    
 
-可以转换的类型是有限制的。这个类型可以是以下值其中的一个：
-二进制，同带binary前缀的效果 : BINARY    
-字符型，可带参数 : CHAR()     
-日期 : DATE     
-时间: TIME     
-日期时间型 : DATETIME     
+可以转换的类型是有限制的。这个类型可以是以下值其中的一个：   
+二进制，同带binary前缀的效果 : BINARY      
+字符型，可带参数 : CHAR()       
+日期 : DATE       
+时间: TIME        
+日期时间型 : DATETIME        
 浮点数 : DECIMAL      
-整数 : SIGNED     
-无符号整数 : UNSIGNED 
+整数 : SIGNED         
+无符号整数 : UNSIGNED    
 
-### 5.2.以汉字首字符排序
-name字段按照汉字正序 , 以name开头第一个字符来排序,依次是空格 0-9 a-z 字符 ,汉字首字拼音的首字母按照a-z来排序;
-select DISTINCT `name` from `your_table` order by convert(`name` using gbk) asc limit 300;
+### 5.2.以汉字首字符排序    
+name字段按照汉字正序 , 以name开头第一个字符来排序,依次是空格 0-9 a-z 字符 ,汉字首字拼音的首字母按照a-z来排序;    
+select DISTINCT `name` from `your_table` order by convert(`name` using gbk) asc limit 300;  
 

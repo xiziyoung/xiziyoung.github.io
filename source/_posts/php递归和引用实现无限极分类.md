@@ -9,11 +9,11 @@ tags:
 - algorithm
 ---
 ## 无限极分类
-类似省、市、区,构建成一个父级下面有多个子元素的数据结构;子元素与父元素之间通常使用id和parentId来关联;
+类似省、市、区,构建成一个父级下面有多个子元素的数据结构;子元素与父元素之间通常使用id和parentId来关联;   
 
-### php递归实现无限极分类:
-该方法实现的无限极分类在数据量和子层级较多时,很慢,因为递归调用每次都要遍历大量的数据;
-代码示例:
+### php递归实现无限极分类:   
+该方法实现的无限极分类在数据量和子层级较多时,很慢,因为递归调用每次都要遍历大量的数据;    
+代码示例:   
 ```php
 <?php
 function buildTreeByRecursion(array $elements, $rootValue = 0, $parentField = "parent", $index = '', $level = 0)
@@ -40,8 +40,8 @@ function buildTreeByRecursion(array $elements, $rootValue = 0, $parentField = "p
 }
 ```
 
-### php引用传值方式实现无限极分类
-首先我们看下简单php的引用传值:
+### php引用传值方式实现无限极分类    
+首先我们看下简单php的引用传值:   
 ```php
 <?php
 $list = [
@@ -63,11 +63,11 @@ $list[2]['children'] = ['third new child'];
 var_dump($tree);
 exit();
 ```
-php的应用传值是将变量对应的内存地址指向同一个地址,即$a = &$b;
-那么修改$a或者$b的值,实际相当于修改的是他们在内存中的地址处的值, 那么两个变量的值都将变化,因为他们的地址指向的值变了;
+php的应用传值是将变量对应的内存地址指向同一个地址,即$a = &$b;   
+那么修改$a或者$b的值,实际相当于修改的是他们在内存中的地址处的值, 那么两个变量的值都将变化,因为他们的地址指向的值变了; 
 
-地址引用无限极分类:
-该方法很快, 因为不用像递归那样多次遍历数据;
+地址引用无限极分类:  
+该方法很快, 因为不用像递归那样多次遍历数据;             
 ```php
 <?php
 function  getTreeByQuote($list, $pid = 0, $parentField = 'parent')
@@ -112,11 +112,11 @@ $res = getTreeByQuote($data, 0, 'parentId');
 
 $_end_time = time();
 $_end = memory_get_usage();
-var_dump('内存使用'.(int)(($_end-$_base)/1024).'kb');
+var_dump('内存使用'.(int)(($_end-$_base)/1024).'kb');   
 var_dump('时间使用'.($_end_time-$_base_time).'s');
 var_dump($res);exit();
 echo json_encode($res,  JSON_UNESCAPED_UNICODE);exit();
 ```
-测试数据: 4818条数据,其中一级44个,二级元素452个,三级元素4326个;
-递归方式,内存使用2082kb,时间使用11s;
-引用方式,内存使用608kb,时间使用0s;
+测试数据: 4818条数据,其中一级44个,二级元素452个,三级元素4326个;   
+递归方式,内存使用2082kb,时间使用11s;    
+引用方式,内存使用608kb,时间使用0s;  
