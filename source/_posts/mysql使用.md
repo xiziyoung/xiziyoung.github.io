@@ -354,3 +354,11 @@ CONVERT(value, type);
 name字段按照汉字正序 , 以name开头第一个字符来排序,依次是空格 0-9 a-z 字符 ,汉字首字拼音的首字母按照a-z来排序;    
 select DISTINCT `name` from `your_table` order by convert(`name` using gbk) asc limit 300;  
 
+
+### 6. union 和 union all 的区别
+union在进行表求并集后会去掉重复的元素，所以会对所产生的结果集进行排序运算，删除重复的记录再返回结果。 
+union all则只是简单地将两个结果集合并后就返回结果。因此，如果返回的两个结果集中有重复的数据，那么返回的结果就会包含重复的数据。 
+**tips:** 使用联合查询,想区分结果集中的数据来自哪一张表,可以在查询中增加一个标志   
+```sql
+SELECT id,name ,1 as from_table_name  FROM `teacher`  union  select id,name,2 as from_table_name  from `student`;
+```

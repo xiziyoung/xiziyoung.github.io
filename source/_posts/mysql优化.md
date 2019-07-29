@@ -16,7 +16,8 @@ tags:
 3. 避免limit 的 offset值过大      
 select * from test_table where sex = 'M' limit 1000000,10;              
 无论如何优化索引,这个查询都将很慢,因为随着便宜量的增加,mysql需要扫描大量需要丢弃的数据;                
-可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;         
+可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;
+**延迟关联**         
 4. 允许为null的列，查询有潜在大坑:           
 SELECT * FROM `test_table` where name != 'tom';该查询结果集中将不包括name is null 的情况;             
 建议:设计表是字段尽量用not null约束以及给默认值。           
@@ -38,16 +39,18 @@ select * from user where email='123456@qq.com' limit 1;
 索引对于良好的性能非常关键,尤其是在表数据量大时; 索引可以先简单理解为书的目录,可以帮你快速定位你想看的内容所在的页码;       
 索引类型:PRIMARY key 主键, normal 一般、unique 唯一、full text 全文           
 
-特别说明:       
+<font color=red>**特别说明:**</font>         
 当查询需要访问大多数行时，顺序读取比通过索引更快。顺序读取可以最大限度地减少磁盘搜索，即使查询不需要所有行也是如此。      
 mysql优化器会基于其他因素,如表大小、行数、I/O块大小来决定是使用索引还是表扫描.        
-一般对于非常小的表 或者 对于大表的大多数数据量的查询(最佳索引是否跨越表的30%以上), 查询时将进行全表扫描;       
+一般对于非常小的表 或者 对于大表的大部分数据量的查询(最佳索引跨越表的30%以上), 查询将进行全表扫描;       
 ```sql  
 -- 例如你在user表中查询sex='男'的记录;sex列建有索引, 但sex='男'的记录占总数据量的50%时;
 EXPLAIN SELECT * FROM `user` where `sex`='男';
 -- 你将看到查询分析的 possible_keys=sex,但是type=ALL,key=Null , 这说明实际并没走索引,而是进行的全表扫描;
 ```
+<font color=yellow>所以在测试下面索引的用法时: 如果发现没有按照你的预期,出现了全表扫描, 请先看下是否是小表或者大表查询超过数据量的30%导致的; </font>    
 
+**索引优化常见注意事项:**  
 1. 查询经常用到的高频字段,用来连表的关联字段 最好建立上索引;       
 2. 前导模糊查询不能命中索引;        
 例如: select * from test_table where name like '%XX'; 无法使用索引      
@@ -63,7 +66,7 @@ explain select * from test_table where YEAR(date) < '2019';
 EXPLAIN SELECT * FROM `user` where age+1 = 49; 无法命中age索引;       
 233333
 计算尽量放到业务层完成,而非数据库层      
-5. B-Tree索引中,复合索引(多列索引)最左匹配原则:          
+5. B-Tree索引中,复合索引(多列索引)**最左前缀**原则:           
 (说明:该项适用与B-Tree索引;哈希和其他类型的索引并不会像B-Tree一样按照顺序存储)     
 即索引key(field1, field2, field3),要想很好利用该索引,需要你的查询语句能使用到靠左的字段,将索引中从左起到右的字段 部分/全部 使用到查询语句中;         
 例如:         
@@ -108,6 +111,34 @@ explain  SELECT * FROM `user` WHERE `country`='EN' AND `work`!='IT' AND `age`=50
 
 ```
 所以，在创建复合索引时，要根据业务需求，where子句中查询使用最频繁的一列放在索引最左边。      
+
+6. 对于范围条件查询,Mysql无法再使用范围列后面的其他索引了,但对于"多个等值条件查询"则没有这个限制;
+```sql
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `age` tinyint(4) NOT NULL,
+  `work` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `age_work` (`age`,`work`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+mysql> EXPLAIN SELECT * FROM `user` where age in (70,75) and `work`='DOCTOR';
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+| id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref  | rows | filtered | Extra                 |
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+|  1 | SIMPLE      | user  | NULL       | range | age_work      | age_work | 768     | NULL |    2 |      100 | Using index condition |
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+1 row in set
+mysql> 
+mysql> EXPLAIN SELECT * FROM `user` where age >=70 and `work`='DOCTOR';
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+| id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref  | rows | filtered | Extra                 |
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+|  1 | SIMPLE      | user  | NULL       | range | age_work      | age_work | 768     | NULL |   12 |       10 | Using index condition |
++----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
+1 row in set
+通过查看filtered是否为100%来判断多列索引的利用情况
+```
 
 6. 索引列的顺序           
 让选择性最强的索引列放在前面。         
@@ -168,6 +199,7 @@ customer_id_selectivity: 0.0373
 * 一些存储引擎（例如 MyISAM）在内存中只缓存索引，而数据依赖于操作系统来缓存。因此，只访问索引可以不使用系统调用（通常比较费时）。       
 * 对于 InnoDB 引擎，若辅助索引能够覆盖查询，则无需访问主索引。        
     
+
  
 # 设计优化
 - - -
