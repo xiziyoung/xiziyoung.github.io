@@ -6,6 +6,29 @@ date: 2017-8-10 12:45:21
 tags:
 - mysql
 ---
+
+## 开篇:
+mysql的书写顺序:
+```sql
+select *columns* from *tables*
+    where *predicae1*
+    group by *columns*
+    having *predicae1*
+    order by *columns*
+    limit *start*, *offset*;
+```
+但是mysql的查询执行顺序并不是按照书写顺序来的,而是按照如下的执行顺序:
+```sql
+from *tables*
+where *predicae1*
+group by *columns*
+having *predicae1*
+select *columns*
+order by *columns*
+limit *start*, *offset*;
+```
+
+
 ## 1.多个值的 IN 匹配     
 语法: (字段1, 字段2)  IN ( (字段1的结果1, 字段2的结果1), (字段1的结果2, 字段2的结果2) )   
 语法示例:  select * from  table  where  (field1, field2) in ( (field1_value,field2_value) , (field1_value, field2_value), (field1_value, field2_value) );
@@ -355,10 +378,113 @@ name字段按照汉字正序 , 以name开头第一个字符来排序,依次是�
 select DISTINCT `name` from `your_table` order by convert(`name` using gbk) asc limit 300;  
 
 
-### 6. union 和 union all 的区别
+## 6. union 和 union all 的区别
 union在进行表求并集后会去掉重复的元素，所以会对所产生的结果集进行排序运算，删除重复的记录再返回结果。 
 union all则只是简单地将两个结果集合并后就返回结果。因此，如果返回的两个结果集中有重复的数据，那么返回的结果就会包含重复的数据。 
 **tips:** 使用联合查询,想区分结果集中的数据来自哪一张表,可以在查询中增加一个标志   
 ```sql
 SELECT id,name ,1 as from_table_name  FROM `teacher`  union  select id,name,2 as from_table_name  from `student`;
 ```
+
+
+## 7.获取每个分组下的前N条数据
+示例:找出各单位薪资前三高的员工
+```sql
+-- ----------------------------
+-- Table structure for user_salary
+-- ----------------------------
+DROP TABLE IF EXISTS `user_salary`;
+CREATE TABLE `user_salary` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `Salary` int(11) NOT NULL COMMENT '薪水',
+  `DepartmentId` int(11) NOT NULL COMMENT '部门id',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='各部门员工薪资表';
+
+-- ----------------------------
+-- Records of user_salary
+-- ----------------------------
+INSERT INTO `user_salary` VALUES ('1', 'one_1', '2000', '1');
+INSERT INTO `user_salary` VALUES ('2', 'two_1', '3000', '1');
+INSERT INTO `user_salary` VALUES ('3', 'three_1', '1000', '1');
+INSERT INTO `user_salary` VALUES ('4', 'four_1', '4000', '1');
+INSERT INTO `user_salary` VALUES ('5', 'one_2', '8000', '2');
+INSERT INTO `user_salary` VALUES ('6', 'two_2', '5000', '2');
+INSERT INTO `user_salary` VALUES ('7', 'three_2', '6000', '2');
+INSERT INTO `user_salary` VALUES ('8', 'four_2', '7000', '2');
+```
+由于mysql执行的先后顺序导致了不能简单的使用group by + order by + limit 来完成该查询;
+(1).查询示例:
+```sql
+mysql> SELECT * FROM `user_salary` as a where 3>(SELECT count(*) FROM `user_salary` as b where b.`DepartmentId`=a.`DepartmentId` and b.`salary` > a.`salary`)
+ORDER BY a.DepartmentId asc,a.Salary desc;
++----+---------+--------+--------------+
+| Id | Name    | Salary | DepartmentId |
++----+---------+--------+--------------+
+|  4 | four_1  |   4000 |            1 |
+|  2 | two_1   |   3000 |            1 |
+|  1 | one_1   |   2000 |            1 |
+|  5 | one_2   |   8000 |            2 |
+|  8 | four_2  |   7000 |            2 |
+|  7 | three_2 |   6000 |            2 |
++----+---------+--------+--------------+
+6 rows in set
+
+mysql> 
+```
+说明:采用逆向思维。各部门薪资最高的前三位，也就是薪资比该条记录的薪资还高的不能超过三条记录，即同一部门中,比当前记录薪资高的数据count(*)<3;
+
+(2).修改下,第一种满足的数据出现大于所需条目的情况
+```sql
+-- 像部门2增加数据
+INSERT INTO `young`.`user_salary` (`Id`, `Name`, `Salary`, `DepartmentId`) VALUES ('9', 'five_2', '8000', '2');
+INSERT INTO `young`.`user_salary` (`Id`, `Name`, `Salary`, `DepartmentId`) VALUES ('10', 'six_2', '8000', '2');
+INSERT INTO `young`.`user_salary` (`Id`, `Name`, `Salary`, `DepartmentId`) VALUES ('11', 'seven_2', '8000', '2');
+```
+同样的查询语句看结果:
+```sql
+ mysql> SELECT * FROM `user_salary` as a where 3>(SELECT count(*) FROM `user_salary` as b where b.`DepartmentId`=a.`DepartmentId` and b.`salary` > a.`salary`)
+ ORDER BY a.DepartmentId asc,a.Salary desc;
+ +----+---------+--------+--------------+
+ | Id | Name    | Salary | DepartmentId |
+ +----+---------+--------+--------------+
+ |  4 | four_1  |   4000 |            1 |
+ |  2 | two_1   |   3000 |            1 |
+ |  1 | one_1   |   2000 |            1 |
+ |  5 | one_2   |   8000 |            2 |
+ |  9 | five_2  |   8000 |            2 |
+ | 10 | six_2   |   8000 |            2 |
+ | 11 | seven_2 |   8000 |            2 |
+ +----+---------+--------+--------------+
+ 7 rows in set
+ 
+ mysql> 
+```
+说明:可以看到部门2出现了四条满足情况的数据,因为最高的8000有四条;
+(如果我们只需三条,可以拿到后按照我们想要的顺序排序,然后程序代码控制只取前三条)
+(3). 类似(2)这样的,如果是想要不同值的前三名最高薪资,可以使用去重COUNT(DISTINCT expr,[expr...])
+```sql
+mysql> SELECT * FROM `user_salary` as a where 3>(SELECT count(DISTINCT b.`salary`) FROM `user_salary` as b where b.`DepartmentId`=a.`DepartmentId` and b.`salary` > a.`salary`)
+ORDER BY a.DepartmentId asc,a.Salary desc;
+
++----+---------+--------+--------------+
+| Id | Name    | Salary | DepartmentId |
++----+---------+--------+--------------+
+|  4 | four_1  |   4000 |            1 |
+|  2 | two_1   |   3000 |            1 |
+|  1 | one_1   |   2000 |            1 |
+|  5 | one_2   |   8000 |            2 |
+|  9 | five_2  |   8000 |            2 |
+| 10 | six_2   |   8000 |            2 |
+| 11 | seven_2 |   8000 |            2 |
+|  8 | four_2  |   7000 |            2 |
+|  7 | three_2 |   6000 |            2 |
++----+---------+--------+--------------+
+9 rows in set
+
+mysql> 
+```
+**参考和题目来源leetcode**:
+https://blog.csdn.net/wzy_1988/article/details/52871636
+https://leetcode-cn.com/problems/department-top-three-salaries/
