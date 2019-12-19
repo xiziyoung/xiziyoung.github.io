@@ -220,8 +220,12 @@ links_title: Links
 links_layout: block
 #links_layout: inline
 links:
-  Title: http://example.com
-  百度:  https://www.baidu.com
+  Github: https://github.com
+  stackoverflow:  https://stackoverflow.com
+  leetcode:  https://leetcode-cn.com
+  hackerrank:  https://www.hackerrank.com/
+  infoq:  https://www.infoq.cn
+
 
 # Sidebar Avatar
 avatar:
