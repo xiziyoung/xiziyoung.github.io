@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="xiziYoung">
 <meta property="og:description" content="查询优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题             不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)             避免limit 的 offset值过大se">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-28T16:14:55.000Z">
+<meta property="og:updated_time" content="2019-12-19T16:48:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql优化">
 <meta name="twitter:description" content="查询优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题             不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)             避免limit 的 offset值过大se">
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-29 00:14:55" itemprop="dateModified" datetime="2019-07-29T00:14:55+08:00">2019-07-29</time>
+                <time title="Modified: 2019-12-20 00:48:03" itemprop="dateModified" datetime="2019-12-20T00:48:03+08:00">2019-12-20</time>
               </span>
             
           
@@ -478,9 +478,9 @@
 <h2 id="常规"><a href="#常规" class="headerlink" title="常规:"></a>常规:</h2><ol>
 <li>使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题            </li>
 <li>不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;<br>(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)            </li>
-<li>避免limit 的 offset值过大<br>select * from test_table where sex = ‘M’ limit 1000000,10;<br>无论如何优化索引,这个查询都将很慢,因为随着便宜量的增加,mysql需要扫描大量需要丢弃的数据;<br>可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;</li>
+<li>避免limit 的 offset值过大<br>select * from test_table where sex = ‘M’ limit 1000000,10;<br>无论如何优化索引,这个查询都将很慢,因为随着偏移量的增加,mysql需要扫描大量需要丢弃的数据;<br>可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;</li>
 </ol>
-<p><strong>延迟关联</strong>         </p>
+<p><strong>延迟关联</strong>          </p>
 <ol start="4">
 <li>允许为null的列，查询有潜在大坑:<br>SELECT * FROM <code>test_table</code> where name != ‘tom’;该查询结果集中将不包括name is null 的情况;<br>建议:设计表是字段尽量用not null约束以及给默认值。           </li>
 <li>如果明确知道只有一条结果返回，limit 1能够提高效率<br>例如你里系统用户不允许一个邮箱注册多个账号,即一个邮箱在用户表里只会有一条有效记录.<br>select * from user where email=’123456@qq.com’;<br>可以优化为：<br>select * from user where email=’123456@qq.com’ limit 1;<br>原因：<br>你知道只有一条结果，但数据库并不知道，明确告诉它，让它主动停止游标移动             </li>
@@ -756,11 +756,23 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://example.com" title="http://example.com" rel="noopener" target="_blank">Title</a>
+                    <a href="https://github.com" title="https://github.com" rel="noopener" target="_blank">Github</a>
                   </li>
                 
                   <li class="links-of-blogroll-item">
-                    <a href="https://www.baidu.com" title="https://www.baidu.com" rel="noopener" target="_blank">百度</a>
+                    <a href="https://stackoverflow.com" title="https://stackoverflow.com" rel="noopener" target="_blank">stackoverflow</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://leetcode-cn.com" title="https://leetcode-cn.com" rel="noopener" target="_blank">leetcode</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.hackerrank.com/" title="https://www.hackerrank.com/" rel="noopener" target="_blank">hackerrank</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.infoq.cn" title="https://www.infoq.cn" rel="noopener" target="_blank">infoq</a>
                   </li>
                 
               </ul>
