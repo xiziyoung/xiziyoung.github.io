@@ -126,4 +126,9 @@ date  |	section  |	user_ids_record | 备注的二进制值
 - - -    
 bitmap不能存储多状态情况,bitmap只有0和1 两个状态,无法做多状态的存储;     
 bitmap不能存储重复数据,bitmap是通过不同的位数,代表不同的数据和不同的状态,不能通过bitmap存储重复的数据;       
-bitmap受int位数限制,在32位机器上,int只有32位4个字节,所以你一个int数据只能最多存储32条数据.(有些语言的int类型在32/64位机器上的位数大小和其语言的解释器有关)            
+bitmap受int位数限制,在32位机器上,int只有32位4个字节,所以你一个int数据只能最多存储32条数据.(有些语言的int类型在32/64位机器上的位数大小和其语言的解释器有关)        
+
+**tips**:
+<table><tr><td bgcolor="#EEE8AA">
+redis的bitmap很适合做记录签到登录这类的功能
+</td></tr></table>    
