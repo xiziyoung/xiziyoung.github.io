@@ -7,7 +7,7 @@ tags:
 - mysql
 ---
 
-## 开篇:
+**开篇**:
 mysql的书写顺序:
 ```sql
 select *columns* from *tables*
@@ -488,3 +488,43 @@ mysql>
 **参考和题目来源leetcode**:
 https://blog.csdn.net/wzy_1988/article/details/52871636
 https://leetcode-cn.com/problems/department-top-three-salaries/
+
+
+## 8.记录一个LeetCode的题目,对count的使用
+题目链接:https://leetcode-cn.com/problems/trips-and-users/
+题解:
+(1). ①查出每天符合情况的, ②然后查出每天总的数目; 将①和②进行连表得出最终结果:
+```sql
+select total.Request_at as `Day`,if(round(complete.cnt/total.cnt, 2) > 0, round(complete.cnt/total.cnt, 2), 0.00) as `Cancellation Rate` from (
+SELECT Request_at,count(*) as cnt FROM Users as u INNER JOIN Trips as t on u.Users_Id=t.Client_Id
+where u.Role='client' and u.Banned='No' 
+and Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+GROUP BY Request_at
+) as total
+LEFT JOIN (
+SELECT Request_at,count(*) as cnt FROM Users as u INNER JOIN Trips as t on u.Users_Id=t.Client_Id
+where u.Role='client' and u.Banned='No' and t.Status in ('cancelled_by_driver', 'cancelled_by_client')
+and Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+GROUP BY Request_at
+) as complete on total.Request_at = complete.Request_at;
+```
+很显然这些看起来很low
+(2).利用count(null) = 0来解决这个问题(参考题解里的大佬答案):
+```sql
+select
+    t.request_at Day, 
+    (
+        round(count(if(status != 'completed', status, null)) / count(status), 2)
+    ) as 'Cancellation Rate'
+from
+    Users u inner join Trips t
+on
+    u.Users_id = t.Client_Id
+and
+    u.banned != 'Yes'
+where
+    t.Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+group by
+    t.Request_at;
+```
+看起来容易理解多了;
