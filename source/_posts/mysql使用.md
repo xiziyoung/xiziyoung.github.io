@@ -7,7 +7,7 @@ tags:
 - mysql
 ---
 
-## 开篇:
+**开篇**:
 mysql的书写顺序:
 ```sql
 select *columns* from *tables*
@@ -379,7 +379,7 @@ select DISTINCT `name` from `your_table` order by convert(`name` using gbk) asc 
 
 
 ## 6. union 和 union all 的区别
-union在进行表求并集后会去掉重复的元素，所以会对所产生的结果集进行排序运算，删除重复的记录再返回结果。 
+union在进行表求并集后会去掉重复的元素，所以会对所产生的结果集进行排序运算，删除重复的记录再返回结果。  
 union all则只是简单地将两个结果集合并后就返回结果。因此，如果返回的两个结果集中有重复的数据，那么返回的结果就会包含重复的数据。 
 **tips:** 使用联合查询,想区分结果集中的数据来自哪一张表,可以在查询中增加一个标志   
 ```sql
@@ -461,7 +461,7 @@ INSERT INTO `young`.`user_salary` (`Id`, `Name`, `Salary`, `DepartmentId`) VALUE
  
  mysql> 
 ```
-说明:可以看到部门2出现了四条满足情况的数据,因为最高的8000有四条;
+说明:可以看到部门2出现了四条满足情况的数据,因为最高的8000有四条;  
 (如果我们只需三条,可以拿到后按照我们想要的顺序排序,然后程序代码控制只取前三条)
 (3). 类似(2)这样的,如果是想要不同值的前三名最高薪资,可以使用去重COUNT(DISTINCT expr,[expr...])
 ```sql
@@ -488,3 +488,45 @@ mysql>
 **参考和题目来源leetcode**:
 https://blog.csdn.net/wzy_1988/article/details/52871636
 https://leetcode-cn.com/problems/department-top-three-salaries/
+
+
+## 8.记录一个LeetCode的题目,对count的使用
+题目链接:https://leetcode-cn.com/problems/trips-and-users/
+题解:  
+(1). ①查出每天符合情况的, ②然后查出每天总的数目; 将①和②进行连表得出最终结果:  
+```sql
+select total.Request_at as `Day`,if(round(complete.cnt/total.cnt, 2) > 0, round(complete.cnt/total.cnt, 2), 0.00) as `Cancellation Rate` from (
+SELECT Request_at,count(*) as cnt FROM Users as u INNER JOIN Trips as t on u.Users_Id=t.Client_Id
+where u.Role='client' and u.Banned='No' 
+and Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+GROUP BY Request_at
+) as total
+LEFT JOIN (
+SELECT Request_at,count(*) as cnt FROM Users as u INNER JOIN Trips as t on u.Users_Id=t.Client_Id
+where u.Role='client' and u.Banned='No' and t.Status in ('cancelled_by_driver', 'cancelled_by_client')
+and Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+GROUP BY Request_at
+) as complete on total.Request_at = complete.Request_at;
+```
+很显然这些看起来很low    
+(2).利用count(null) = 0来解决这个问题(参考题解里的大佬答案):  
+```sql
+select
+    t.request_at Day, 
+    (
+        round(count(if(status != 'completed', status, null)) / count(status), 2)
+    ) as 'Cancellation Rate'
+from
+    Users u inner join Trips t
+on
+    u.Users_id = t.Client_Id
+and
+    u.banned != 'Yes'
+where
+    t.Request_at BETWEEN '2013-10-01' and '2013-10-03' 
+group by
+    t.Request_at;
+```
+看起来容易理解多了;    
+**sql中NULL的更多说明参考**  
+https://www.infoq.cn/article/CKm0rLd6VZaSxj6iR1ib  
