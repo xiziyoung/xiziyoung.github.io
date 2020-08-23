@@ -9,33 +9,76 @@ tags:
 # 查询优化
 - - -
 多用DESC 或者 EXPLAIN分析查询情况;        
-##  常规:     
-1. 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题            
+###  常规:     
+1. 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).            
 2. 不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;               
 (以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)            
-3. 避免limit 的 offset值过大      
-select * from test_table where sex = 'M' limit 1000000,10;              
+3. 排序优化:
+1).一般的获取分页数据,数据集较小,文件排序也很快; 但是对于类似一次按照顺序导出大量数据的时候,数据集很大,文件排序就会很慢,得让排序用上索引;
+2).避免limit 的 offset值过大.       
+select * from test_table where sex = 'M' order by rating limit 1000000,10;              
 无论如何优化索引,这个查询都将很慢,因为随着偏移量的增加,mysql需要扫描大量需要丢弃的数据;                
 可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;
-**延迟关联**          
-4. 允许为null的列，查询有潜在大坑:           
+
+ <font color=black>延迟关联 : </font>
+优化这类索引的另一个比较好的策略是使用延迟关联，通过使用覆盖索引查询返回需要的主键，再根据这类逐渐关联原来获取得需要的行。这就可以减少MySQL扫描那些需要丢弃的行数。下面这个查询显示了如何高效的使用（sex rating）索引进行排序和分页：
+```sql
+mysql> SELECT <cols> FROM profiles INNER JOIN(
+      ->           SELECT <primary key cols> FROM profiles
+      ->           WHERE x.sex = 'M' ORDER BY rating LIMIT 100000,10
+      ->  ) AS x USING(<primary key cols>);
+上面语句优化的结果：
+mysql> SELECT <cols> FROM profiles INNER JOIN(
+      ->           SELECT id FROM profiles
+      ->           WHERE x.sex = 'M' ORDER BY rating LIMIT 100000,10
+      ->  ) AS x WHERE x.id = profiles.id;
+```
+
+3).如果不是因为每次要获取相同条目的数据使用分页limit和offset; 而是因为想分批次处理完一批数据集(避免一次加载到内存中),而使用limit和offset,可以使用between and来避免offset的性能问题;
+例如: 给平台满足条件的用户(假如有很多,50万)发送消息;
+常见的方式是脚本for循环用户表select <cols> from user_tab where ... limit 10000, 500;每次取500个满足条件的用户,直打取完;这样这个循环到了后面offset的值会非常的大,造成性能问题;
+推荐:使用between and循环取区间数据集的方法 来代替上面的limit offset;具体实现如下:
+要求用户id是自增的; 查询最小的用户id 和 最大的用户id, 每次批量处理一部分, 使用 between  and 来查找用户id;
+```php
+$minUserId = User::where('create_time', '<=', $endTime)->where('delete', 0)->min('user_id');
+$maxUserId = User::where('create_time', '<=', $endTime)->where('delete', 0)->max('user_id');
+$studyReportModel = new MonthlyStudyReport();
+for ($start = $minUserId; $start <= $maxUserId; $start += $pageSize + 1) {
+                $end = ($start + $pageSize) > $maxUserId ? $maxUserId : $start + $pageSize;
+    
+                $msg = 'GenerateMonthlyStudyReport本次处理的用户id区间起始: ' . $start . " 结束为" . $end;
+                $this->output->info($msg);
+                Log4dd::info($msg);
+    
+                $userIds = User::where('user_id', 'between', [$start, $end])->where('create_time', '<=', $endTime)->where('delete', 0)->column('user_id');
+                !empty($userIds) && $this->sendMessage($userIds);//如果查到这个between and范围内的数据不为空,则对这些用户执行消息发送; 使用between and区间查询,因为后面还有where附加条件,所以这个区间里不满足条件的用户一样会被过滤掉;
+                //虽然每次获取到的数据集条目不一定是500个(筛选后可能小于500), 但是并不影响我们最终给所有满足条件的用户发送了消息; 而且避开了limit offset过大的性能问题;
+    
+                $msg = 'GenerateMonthlyStudyReport该批次处理完';
+                Log4dd::info($msg);
+                $this->output->info($msg);         
+}        
+```
+        
+4. 允许为null的列，查询有潜在大坑:             
 SELECT * FROM `test_table` where name != 'tom';该查询结果集中将不包括name is null 的情况;             
 建议:设计表是字段尽量用not null约束以及给默认值。           
-5. 如果明确知道只有一条结果返回，limit 1能够提高效率             
+5. 如果明确知道只有一条结果返回，limit 1能够提高效率                
 例如你里系统用户不允许一个邮箱注册多个账号,即一个邮箱在用户表里只会有一条有效记录.          
 select * from user where email='123456@qq.com';             
-可以优化为：          
-select * from user where email='123456@qq.com' limit 1; 
+可以优化为：              
+select * from user where email='123456@qq.com' limit 1;     
 原因：     
 你知道只有一条结果，但数据库并不知道，明确告诉它，让它主动停止游标移动             
-6. 分解大连接查询      
+6. 分解大连接查询          
 连表查询虽然能让我们更方便的拿到想要的数据, 但应该避免多个大表的连接查询, 连表过多会导致查询慢(特表是很多大表连接,且无法很好的用索引优化到查询时);           
 可以先查出主要的数据结果集, 然后利用结果集中的关联字段去对应表中查询到关联结果集,再用程序将关联结果集聚合到总的数据结果集中;            
-或者先查出小表的数据集,然后用这个数据集join大表;     
+或者先查出小表的数据集,然后用这个数据集join大表; 
+7. 防止sql注入, 类似laravel中如果写原生的raw查询等,参数使用绑定的方式,而不要直接写死到语句中;
+8. 事务最小化原则      
 
 
-
-## 索引:
+### 索引:      
 索引对于良好的性能非常关键,尤其是在表数据量大时; 索引可以先简单理解为书的目录,可以帮你快速定位你想看的内容所在的页码;       
 索引类型:PRIMARY key 主键, normal 一般、unique 唯一、full text 全文           
 
@@ -197,25 +240,34 @@ customer_id_selectivity: 0.0373
 具有以下优点：     
 * 索引通常远小于数据行的大小，只读取索引能大大减少数据访问量。        
 * 一些存储引擎（例如 MyISAM）在内存中只缓存索引，而数据依赖于操作系统来缓存。因此，只访问索引可以不使用系统调用（通常比较费时）。       
-* 对于 InnoDB 引擎，若辅助索引能够覆盖查询，则无需访问主索引。        
-    
-
+* 对于 InnoDB 引擎，若辅助索引能够覆盖查询，则无需访问主索引。            
  
+ 
+ 
+ 
+        
+        
 # 设计优化
 - - -
-## 缓存
+### 选择合适的存储引擎:
+建表时就考虑选择存储引擎，如果是新闻之类的数据，由于插入和查询需求大，就选择myasim  (Myisam：表锁，全文索引) ; 如果是电商中的数据,由于要用到事务和行锁,选择innodb  ( innodb行(记录)锁，事务（回滚），外键.  事务安全型存储引擎，更加注重数据的完整性和安全性。)
+
+Memory：内存存储引擎，速度快、数据容易丢失
+
+### 缓存
 mysql服务自身提供的有缓存系统,可以开启缓存;       
 但建议使用redis/memcached        
-## 分区       
+### 分区       
 基本概念，把一个表，从逻辑上分成多个区域，便于存储数据。        
 采用分区的前提，数据量非常大。         
 如果数据表的记录非常多，比如达到上亿条，数据表的活性就大大降低，数据表的运行速度就比较慢、效率低下，影响mysql数据库的整体性能，就可以采用分区解决，分区是mysql本身就支持的技术    
-## 分表
+### 分表
 水平拆分：是把一个表的全部记录信息分别存储到不同的分表之中。            
 程序需要注意的是从哪个表读入,向哪个表更新;       
 
 垂直拆分：是把一个表的全部字段分别存储到不同的表里边。             
 
-## 清理数据碎片       
-## 读写分离 
-## 表结构设计    
+### 清理数据碎片       
+### 读写分离 
+### 表结构设计:
+使用最小的字段通常更好,避免null,默认值    
