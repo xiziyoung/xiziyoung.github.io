@@ -94,18 +94,18 @@
 
 
 
-  <meta name="description" content="查询优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)              排序优化:1).">
+  <meta name="description" content="查询优化, 索引优化, 库表机构优化 需要齐头并进, 一个不落 查询优化和索引优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了selec">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql优化">
 <meta property="og:url" content="http://yoursite.com/2018/04/08/mysql优化/index.html">
 <meta property="og:site_name" content="xiziYoung">
-<meta property="og:description" content="查询优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)              排序优化:1).">
+<meta property="og:description" content="查询优化, 索引优化, 库表机构优化 需要齐头并进, 一个不落 查询优化和索引优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了selec">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-08-23T07:52:41.000Z">
+<meta property="og:updated_time" content="2020-08-27T07:56:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql优化">
-<meta name="twitter:description" content="查询优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)              排序优化:1).">
+<meta name="twitter:description" content="查询优化, 索引优化, 库表机构优化 需要齐头并进, 一个不落 查询优化和索引优化 多用DESC 或者 EXPLAIN分析查询情况;         常规: 使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).              不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;(以下示例为了简洁, 大量使用了selec">
 
 
 
@@ -421,7 +421,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2020-08-23 15:52:41" itemprop="dateModified" datetime="2020-08-23T15:52:41+08:00">2020-08-23</time>
+                <time title="Modified: 2020-08-27 15:56:32" itemprop="dateModified" datetime="2020-08-27T15:56:32+08:00">2020-08-27</time>
               </span>
             
           
@@ -473,14 +473,15 @@
       
 
       
-        <h1 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h1><hr>
+        <p>查询优化, 索引优化, 库表机构优化 需要齐头并进, 一个不落</p>
+<h1 id="查询优化和索引优化"><a href="#查询优化和索引优化" class="headerlink" title="查询优化和索引优化"></a>查询优化和索引优化</h1><hr>
 <p>多用DESC 或者 EXPLAIN分析查询情况;        </p>
 <h3 id="常规"><a href="#常规" class="headerlink" title="常规:"></a>常规:</h3><ol>
 <li><p>使用缓存, 缓存技术在很多时候能很好的解决数据库查询慢的问题.(redis等等).            </p>
 </li>
 <li><p>不要使用select *，只返回需要的列，能够大大的节省数据传输量，与数据库的内存使用量;<br>(以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)            </p>
 </li>
-<li><p>排序优化:<br>1).一般的获取分页数据,数据集较小,文件排序也很快; 但是对于类似一次按照顺序导出大量数据的时候,数据集很大,文件排序就会很慢,得让排序用上索引;<br>2).避免limit 的 offset值过大.<br>select * from test_table where sex = ‘M’ order by rating limit 1000000,10;<br>无论如何优化索引,这个查询都将很慢,因为随着偏移量的增加,mysql需要扫描大量需要丢弃的数据;<br>可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;</p>
+<li><p>排序优化:<br>1).一般的获取分页数据,数据集较小,文件排序也很快; 但是对于类似一次按照顺序导出大量数据的时候,数据集很大,文件排序就会很慢,得让排序用上索引;<br>order by在使用索引的时候同样要遵守最左前缀原则;<br>需要所有排序列的排序方向一致(都为正序或都为倒序);<br>连表查询时,order by的字段需要都是第一个表的才能命中索引;<br>2).避免limit 的 offset值过大.<br>select * from test_table where sex = ‘M’ order by rating limit 1000000,10;<br>无论如何优化索引,这个查询都将很慢,因为随着偏移量的增加,mysql需要扫描大量需要丢弃的数据;<br>可以通过限制用户能够翻页的数据量来避免该问题,一般也没用户在意搜索结果的上千页;</p>
 <p><font color="black">延迟关联 : </font><br>优化这类索引的另一个比较好的策略是使用延迟关联，通过使用覆盖索引查询返回需要的主键，再根据这类逐渐关联原来获取得需要的行。这就可以减少MySQL扫描那些需要丢弃的行数。下面这个查询显示了如何高效的使用（sex rating）索引进行排序和分页：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT &lt;cols&gt; FROM profiles INNER JOIN(</span><br><span class="line">      -&gt;           SELECT &lt;primary key cols&gt; FROM profiles</span><br><span class="line">      -&gt;           WHERE x.sex = 'M' ORDER BY rating LIMIT 100000,10</span><br><span class="line">      -&gt;  ) AS x USING(&lt;primary key cols&gt;);</span><br><span class="line">上面语句优化的结果：</span><br><span class="line">mysql&gt; SELECT &lt;cols&gt; FROM profiles INNER JOIN(</span><br><span class="line">      -&gt;           SELECT id FROM profiles</span><br><span class="line">      -&gt;           WHERE x.sex = 'M' ORDER BY rating LIMIT 100000,10</span><br><span class="line">      -&gt;  ) AS x WHERE x.id = profiles.id;</span><br></pre></td></tr></table></figure>
 
@@ -491,12 +492,26 @@
 
 
 <ol start="4">
-<li>允许为null的列，查询有潜在大坑:<br>SELECT * FROM <code>test_table</code> where name != ‘tom’;该查询结果集中将不包括name is null 的情况;<br>建议:设计表是字段尽量用not null约束以及给默认值。           </li>
-<li>如果明确知道只有一条结果返回，limit 1能够提高效率<br>例如你里系统用户不允许一个邮箱注册多个账号,即一个邮箱在用户表里只会有一条有效记录.<br>select * from user where email=’123456@qq.com’;<br>可以优化为：<br>select * from user where email=’123456@qq.com’ limit 1;<br>原因：<br>你知道只有一条结果，但数据库并不知道，明确告诉它，让它主动停止游标移动             </li>
-<li>分解大连接查询<br>连表查询虽然能让我们更方便的拿到想要的数据, 但应该避免多个大表的连接查询, 连表过多会导致查询慢(特表是很多大表连接,且无法很好的用索引优化到查询时);<br>可以先查出主要的数据结果集, 然后利用结果集中的关联字段去对应表中查询到关联结果集,再用程序将关联结果集聚合到总的数据结果集中;<br>或者先查出小表的数据集,然后用这个数据集join大表; </li>
-<li>防止sql注入, 类似laravel中如果写原生的raw查询等,参数使用绑定的方式,而不要直接写死到语句中;</li>
-<li>事务最小化原则      </li>
+<li><p>允许为null的列，查询有潜在大坑:<br>SELECT * FROM <code>test_table</code> where name != ‘tom’;该查询结果集中将不包括name is null 的情况;<br>建议:设计表是字段尽量用not null约束以及给默认值。           </p>
+</li>
+<li><p>如果明确知道只有一条结果返回，limit 1能够提高效率<br>例如你里系统用户不允许一个邮箱注册多个账号,即一个邮箱在用户表里只会有一条有效记录.<br>select * from user where email=’123456@qq.com’;<br>可以优化为：<br>select * from user where email=’123456@qq.com’ limit 1;<br>原因：<br>你知道只有一条结果，但数据库并不知道，明确告诉它，让它主动停止游标移动             </p>
+</li>
+<li><p>分解大连接查询<br>连表查询虽然能让我们更方便的拿到想要的数据, 但应该避免多个大表的连接查询, 连表过多会导致查询慢(特表是很多大表连接,且无法很好的用索引优化到查询时);<br>可以先查出主要的数据结果集, 然后利用结果集中的关联字段去对应表中查询到关联结果集,再用程序将关联结果集聚合到总的数据结果集中;<br>或者先查出小表的数据集,然后用这个数据集join大表; </p>
+</li>
+<li><p>防止sql注入, 类似laravel中如果写原生的raw查询等,参数使用绑定的方式,而不要直接写死到语句中;</p>
+</li>
+<li><p>事务最小化原则      </p>
+</li>
+<li><p>死锁的预防;</p>
+</li>
+<li><p>or查询转union</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index <span class="keyword">FROM</span> test_table <span class="keyword">WHERE</span> field1_index = <span class="string">'1'</span> <span class="keyword">OR</span> field2_index = <span class="string">'1'</span>; </span><br><span class="line">如果field1_index, field2_index上建有索引 这种or查询将导致使用不了索引,</span><br><span class="line">可以修改为以下使用UNION:</span><br><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index <span class="keyword">FROM</span> test_table <span class="keyword">WHERE</span> field1_index = <span class="string">'1'</span> </span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index <span class="keyword">FROM</span> test_table <span class="keyword">WHERE</span> field2_index = <span class="string">'1'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接查询时,大表转小表,然后再连接:</p>
+</li>
 </ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">(1).where条件放在on内外的区别(特别是外连接查询时):</span><br><span class="line">mysql&gt; SELECT * FROM `t1`;</span><br><span class="line">+<span class="comment">----+------+---------------------+</span></span><br><span class="line">| id | name | deleted_at          |</span><br><span class="line">+<span class="comment">----+------+---------------------+</span></span><br><span class="line">|  1 | 小明 | 2019-08-27 15:40:30 |</span><br><span class="line">|  2 | 小天 | NULL                |</span><br><span class="line">+<span class="comment">----+------+---------------------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.05</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`t2`</span>;</span><br><span class="line">+<span class="comment">----+-----+---------------------+</span></span><br><span class="line">| id | age | deleted_at          |</span><br><span class="line">+<span class="comment">----+-----+---------------------+</span></span><br><span class="line">|  2 |  25 | 2019-08-27 15:41:41 |</span><br><span class="line">+<span class="comment">----+-----+---------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.04</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> t2 <span class="keyword">ON</span> t1.id = t2.id <span class="keyword">AND</span>  t2.deleted_at <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">WHERE</span> t1.deleted_at <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br><span class="line">+<span class="comment">----+------+------------+------+------+------------+</span></span><br><span class="line">| id | name | deleted_at | id   | age  | deleted_at |</span><br><span class="line">+<span class="comment">----+------+------------+------+------+------------+</span></span><br><span class="line">|  2 | 小天 | NULL       | NULL | NULL | NULL       |</span><br><span class="line">+<span class="comment">----+------+------------+------+------+------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.04</span> sec)</span><br><span class="line"><span class="comment">-- 条件跟在ON条件里面,先筛选t2表的记录，然后根据t1表返回t1表所有行</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> t2 <span class="keyword">ON</span> t1.id = t2.id  <span class="keyword">WHERE</span> t1.deleted_at <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">AND</span>  t2.deleted_at <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br><span class="line">Empty <span class="keyword">set</span></span><br><span class="line"><span class="comment">-- 条件在外面，先根据t1表返回所有记录，然后根据t2表条件删除记录</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="number">2</span>).利用关联表的<span class="keyword">where</span>写在<span class="keyword">on</span>里面可以减小关联表的数据量来优化内连接<span class="keyword">join</span>查询:</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a <span class="keyword">json</span> b <span class="keyword">on</span> b.a_id = a.id <span class="keyword">where</span> b.field1 = <span class="number">100</span>;</span><br><span class="line"><span class="comment">-- 可改为</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a <span class="keyword">json</span> b <span class="keyword">on</span> b.a_id = a.id <span class="keyword">and</span> b.field1 = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
 <h3 id="索引"><a href="#索引" class="headerlink" title="索引:"></a>索引:</h3><p>索引对于良好的性能非常关键,尤其是在表数据量大时; 索引可以先简单理解为书的目录,可以帮你快速定位你想看的内容所在的页码;<br>索引类型:PRIMARY key 主键, normal 一般、unique 唯一、full text 全文           </p>
 <p><font color="red"><strong>特别说明:</strong></font><br>当查询需要访问大多数行时，顺序读取比通过索引更快。顺序读取可以最大限度地减少磁盘搜索，即使查询不需要所有行也是如此。<br>mysql优化器会基于其他因素,如表大小、行数、I/O块大小来决定是使用索引还是表扫描.<br>一般对于非常小的表 或者 对于大表的大部分数据量的查询(最佳索引跨越表的30%以上), 查询将进行全表扫描;       </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 例如你在user表中查询sex='男'的记录;sex列建有索引, 但sex='男'的记录占总数据量的50%时;</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`user`</span> <span class="keyword">where</span> <span class="string">`sex`</span>=<span class="string">'男'</span>;</span><br><span class="line"><span class="comment">-- 你将看到查询分析的 possible_keys=sex,但是type=ALL,key=Null , 这说明实际并没走索引,而是进行的全表扫描;</span></span><br></pre></td></tr></table></figure>
@@ -538,15 +553,15 @@
 <li>一些存储引擎（例如 MyISAM）在内存中只缓存索引，而数据依赖于操作系统来缓存。因此，只访问索引可以不使用系统调用（通常比较费时）。       </li>
 <li>对于 InnoDB 引擎，若辅助索引能够覆盖查询，则无需访问主索引。            </li>
 </ul>
-<h1 id="设计优化"><a href="#设计优化" class="headerlink" title="设计优化"></a>设计优化</h1><hr>
+<h1 id="库表结构设计优化及其他"><a href="#库表结构设计优化及其他" class="headerlink" title="库表结构设计优化及其他"></a>库表结构设计优化及其他</h1><hr>
 <h3 id="选择合适的存储引擎"><a href="#选择合适的存储引擎" class="headerlink" title="选择合适的存储引擎:"></a>选择合适的存储引擎:</h3><p>建表时就考虑选择存储引擎，如果是新闻之类的数据，由于插入和查询需求大，就选择myasim  (Myisam：表锁，全文索引) ; 如果是电商中的数据,由于要用到事务和行锁,选择innodb  ( innodb行(记录)锁，事务（回滚），外键.  事务安全型存储引擎，更加注重数据的完整性和安全性。)</p>
 <p>Memory：内存存储引擎，速度快、数据容易丢失</p>
+<h3 id="表结构设计"><a href="#表结构设计" class="headerlink" title="表结构设计:"></a>表结构设计:</h3><p>使用最小的字段通常更好,例如:固定长度的可以用char，类似md5()的密码;<br>避免null;<br>记得默认值,commit;<br>建立恰当的索引;<br>id自增，AUTO_INCREMENT<br>标记类型的type/is_delete等可以用tinyint；<br>bitmap;</p>
 <h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>mysql服务自身提供的有缓存系统,可以开启缓存;<br>但建议使用redis/memcached        </p>
 <h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><p>基本概念，把一个表，从逻辑上分成多个区域，便于存储数据。<br>采用分区的前提，数据量非常大。<br>如果数据表的记录非常多，比如达到上亿条，数据表的活性就大大降低，数据表的运行速度就比较慢、效率低下，影响mysql数据库的整体性能，就可以采用分区解决，分区是mysql本身就支持的技术    </p>
 <h3 id="分表"><a href="#分表" class="headerlink" title="分表"></a>分表</h3><p>水平拆分：是把一个表的全部记录信息分别存储到不同的分表之中。<br>程序需要注意的是从哪个表读入,向哪个表更新;       </p>
 <p>垂直拆分：是把一个表的全部字段分别存储到不同的表里边。             </p>
-<h3 id="清理数据碎片"><a href="#清理数据碎片" class="headerlink" title="清理数据碎片"></a>清理数据碎片</h3><h3 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h3><h3 id="表结构设计"><a href="#表结构设计" class="headerlink" title="表结构设计:"></a>表结构设计:</h3><p>使用最小的字段通常更好,避免null,默认值    </p>
-
+<h3 id="清理数据碎片"><a href="#清理数据碎片" class="headerlink" title="清理数据碎片"></a>清理数据碎片</h3><h3 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h3>
       
     </div>
 
@@ -812,7 +827,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#查询优化"><span class="nav-number">1.</span> <span class="nav-text">查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常规"><span class="nav-number">1.0.1.</span> <span class="nav-text">常规:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-number">1.0.2.</span> <span class="nav-text">索引:</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#设计优化"><span class="nav-number">2.</span> <span class="nav-text">设计优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择合适的存储引擎"><span class="nav-number">2.0.1.</span> <span class="nav-text">选择合适的存储引擎:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">2.0.2.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">2.0.3.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分表"><span class="nav-number">2.0.4.</span> <span class="nav-text">分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清理数据碎片"><span class="nav-number">2.0.5.</span> <span class="nav-text">清理数据碎片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读写分离"><span class="nav-number">2.0.6.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表结构设计"><span class="nav-number">2.0.7.</span> <span class="nav-text">表结构设计:</span></a></li></ol></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#查询优化和索引优化"><span class="nav-number">1.</span> <span class="nav-text">查询优化和索引优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常规"><span class="nav-number">1.0.1.</span> <span class="nav-text">常规:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-number">1.0.2.</span> <span class="nav-text">索引:</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#库表结构设计优化及其他"><span class="nav-number">2.</span> <span class="nav-text">库表结构设计优化及其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择合适的存储引擎"><span class="nav-number">2.0.1.</span> <span class="nav-text">选择合适的存储引擎:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表结构设计"><span class="nav-number">2.0.2.</span> <span class="nav-text">表结构设计:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">2.0.3.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区"><span class="nav-number">2.0.4.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分表"><span class="nav-number">2.0.5.</span> <span class="nav-text">分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清理数据碎片"><span class="nav-number">2.0.6.</span> <span class="nav-text">清理数据碎片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读写分离"><span class="nav-number">2.0.7.</span> <span class="nav-text">读写分离</span></a></li></ol></li></div>
             
 
           </div>
