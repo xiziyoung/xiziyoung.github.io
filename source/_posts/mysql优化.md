@@ -6,7 +6,10 @@ date: 2018-04-08 11:10:47
 tags:
 - mysql
 ---
-# 查询优化
+
+查询优化, 索引优化, 库表机构优化 需要齐头并进, 一个不落
+
+# 查询优化和索引优化
 - - -
 多用DESC 或者 EXPLAIN分析查询情况;        
 ###  常规:     
@@ -15,6 +18,9 @@ tags:
 (以下示例为了简洁, 大量使用了select *, 实际项目中尽量避免)            
 3. 排序优化:
 1).一般的获取分页数据,数据集较小,文件排序也很快; 但是对于类似一次按照顺序导出大量数据的时候,数据集很大,文件排序就会很慢,得让排序用上索引;
+order by在使用索引的时候同样要遵守最左前缀原则;
+需要所有排序列的排序方向一致(都为正序或都为倒序);
+连表查询时,order by的字段需要都是第一个表的才能命中索引;
 2).避免limit 的 offset值过大.       
 select * from test_table where sex = 'M' order by rating limit 1000000,10;              
 无论如何优化索引,这个查询都将很慢,因为随着偏移量的增加,mysql需要扫描大量需要丢弃的数据;                
@@ -76,7 +82,57 @@ select * from user where email='123456@qq.com' limit 1;
 或者先查出小表的数据集,然后用这个数据集join大表; 
 7. 防止sql注入, 类似laravel中如果写原生的raw查询等,参数使用绑定的方式,而不要直接写死到语句中;
 8. 事务最小化原则      
+9. 死锁的预防;
+10. or查询转union
+```sql
+SELECT field1_index, field2_index FROM test_table WHERE field1_index = '1' OR field2_index = '1'; 
+如果field1_index, field2_index上建有索引 这种or查询将导致使用不了索引,
+可以修改为以下使用UNION:
+SELECT field1_index, field2_index FROM test_table WHERE field1_index = '1' 
+UNION
+SELECT field1_index, field2_index FROM test_table WHERE field2_index = '1';
+```
+11. 连接查询时,大表转小表,然后再连接:
 
+```sql
+(1).where条件放在on内外的区别(特别是外连接查询时):
+mysql> SELECT * FROM `t1`;
++----+------+---------------------+
+| id | name | deleted_at          |
++----+------+---------------------+
+|  1 | 小明 | 2019-08-27 15:40:30 |
+|  2 | 小天 | NULL                |
++----+------+---------------------+
+2 rows in set (0.05 sec)
+
+mysql> SELECT * FROM `t2`;
++----+-----+---------------------+
+| id | age | deleted_at          |
++----+-----+---------------------+
+|  2 |  25 | 2019-08-27 15:41:41 |
++----+-----+---------------------+
+1 row in set (0.04 sec)
+
+mysql> SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id AND  t2.deleted_at IS NULL WHERE t1.deleted_at IS NULL;
++----+------+------------+------+------+------------+
+| id | name | deleted_at | id   | age  | deleted_at |
++----+------+------------+------+------+------------+
+|  2 | 小天 | NULL       | NULL | NULL | NULL       |
++----+------+------------+------+------+------------+
+1 row in set (0.04 sec)
+-- 条件跟在ON条件里面,先筛选t2表的记录，然后根据t1表返回t1表所有行
+
+mysql> SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id  WHERE t1.deleted_at IS NULL AND  t2.deleted_at IS NULL;
+Empty set
+-- 条件在外面，先根据t1表返回所有记录，然后根据t2表条件删除记录
+
+
+(2).利用关联表的where写在on里面可以减小关联表的数据量来优化内连接join查询:
+select * from a json b on b.a_id = a.id where b.field1 = 100;
+-- 可改为
+select * from a json b on b.a_id = a.id and b.field1 = 100;
+
+```
 
 ### 索引:      
 索引对于良好的性能非常关键,尤其是在表数据量大时; 索引可以先简单理解为书的目录,可以帮你快速定位你想看的内容所在的页码;       
@@ -247,12 +303,22 @@ customer_id_selectivity: 0.0373
  
         
         
-# 设计优化
+# 库表结构设计优化及其他
 - - -
 ### 选择合适的存储引擎:
 建表时就考虑选择存储引擎，如果是新闻之类的数据，由于插入和查询需求大，就选择myasim  (Myisam：表锁，全文索引) ; 如果是电商中的数据,由于要用到事务和行锁,选择innodb  ( innodb行(记录)锁，事务（回滚），外键.  事务安全型存储引擎，更加注重数据的完整性和安全性。)
 
 Memory：内存存储引擎，速度快、数据容易丢失
+
+### 表结构设计:
+使用最小的字段通常更好,例如:固定长度的可以用char，类似md5()的密码;
+避免null;
+记得默认值,commit; 
+建立恰当的索引;
+id自增，AUTO_INCREMENT
+标记类型的type/is_delete等可以用tinyint；
+bitmap;
+
 
 ### 缓存
 mysql服务自身提供的有缓存系统,可以开启缓存;       
@@ -269,5 +335,3 @@ mysql服务自身提供的有缓存系统,可以开启缓存;
 
 ### 清理数据碎片       
 ### 读写分离 
-### 表结构设计:
-使用最小的字段通常更好,避免null,默认值    
