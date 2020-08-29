@@ -94,13 +94,18 @@
 
 
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="xiziYoung">
-<meta property="og:url" content="http://yoursite.com/archives/2018/04/index.html">
+  <meta name="description" content="反射:PHP 5 开始 具有完整的反射 API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。 此外，反射 API 提供了方法来取出函数、类和方法中的文档注释。反射是一切框架的基础;参考 : https://www.php.net/manual/zh/book.reflection.php 首先我们来下下面这个例子:在laravel框架中,很多对象实例通过方法参数定义就能传递进来，调用的时">
+<meta name="keywords" content="laravel,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解laravel中的Ioc容器,依赖注入">
+<meta property="og:url" content="http://yoursite.com/2019/07/26/理解laravel中的Ioc容器,依赖注入/index.html">
 <meta property="og:site_name" content="xiziYoung">
+<meta property="og:description" content="反射:PHP 5 开始 具有完整的反射 API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。 此外，反射 API 提供了方法来取出函数、类和方法中的文档注释。反射是一切框架的基础;参考 : https://www.php.net/manual/zh/book.reflection.php 首先我们来下下面这个例子:在laravel框架中,很多对象实例通过方法参数定义就能传递进来，调用的时">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-08-29T11:41:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xiziYoung">
+<meta name="twitter:title" content="理解laravel中的Ioc容器,依赖注入">
+<meta name="twitter:description" content="反射:PHP 5 开始 具有完整的反射 API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。 此外，反射 API 提供了方法来取出函数、类和方法中的文档注释。反射是一切框架的基础;参考 : https://www.php.net/manual/zh/book.reflection.php 首先我们来下下面这个例子:在laravel框架中,很多对象实例通过方法参数定义就能传递进来，调用的时">
 
 
 
@@ -108,7 +113,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/archives/2018/04/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/26/理解laravel中的Ioc容器,依赖注入/">
 
 
 
@@ -118,7 +123,7 @@
   };
 </script>
 
-  <title>Archive | xiziYoung</title>
+  <title>理解laravel中的Ioc容器,依赖注入 | xiziYoung</title>
   
 
 
@@ -166,7 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -220,7 +225,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -297,28 +302,6 @@
   
     
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
   
 
   
@@ -364,113 +347,219 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        Um..! 8 posts in total. Keep on posting.
-      </span>
-      
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/26/理解laravel中的Ioc容器,依赖注入/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xiziYoung">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiziYoung">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2018/04/08/mysql优化/" itemprop="url">
-            
-              <span itemprop="name">mysql优化</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">理解laravel中的Ioc容器,依赖注入
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-08T11:10:47+08:00" content="2018-04-08">
-          04-08
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
 
+          
+          
+          
 
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-26 14:37:20" itemprop="dateCreated datePublished" datetime="2019-07-26T14:37:20+08:00">2019-07-26</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2020-08-29 19:41:55" itemprop="dateModified" datetime="2020-08-29T19:41:55+08:00">2020-08-29</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2018/04/05/mysql优化之EXPLAIN/" itemprop="url">
-            
-              <span itemprop="name">mysql优化之EXPLAIN</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-04-05T16:50:34+08:00" content="2018-04-05">
-          04-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
+      
+        <p><strong>反射:</strong><br>PHP 5 开始 具有完整的反射 API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。 此外，反射 API 提供了方法来取出函数、类和方法中的文档注释。<br>反射是一切框架的基础;<br>参考 : <a href="https://www.php.net/manual/zh/book.reflection.php" target="_blank" rel="noopener">https://www.php.net/manual/zh/book.reflection.php</a></p>
+<p>首先我们来下下面这个例子:<br>在laravel框架中,很多对象实例通过方法参数定义就能传递进来，调用的时候不需要我们自己去手动传入对象实例。<br>类似这样:     </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// routes/web.php</span></span><br><span class="line">Route::get(<span class="string">'/post/store'</span>, <span class="string">'PostController@store'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// App\Http\Controllers</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">store</span><span class="params">(Illuminate\Http\Request $request)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;validate($request, [</span><br><span class="line">            <span class="string">'category_id'</span> =&gt; <span class="string">'required'</span>,</span><br><span class="line">            <span class="string">'title'</span> =&gt; <span class="string">'required|max:255|min:4'</span>,</span><br><span class="line">            <span class="string">'body'</span> =&gt; <span class="string">'required|min:6'</span>,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上, 我们在调用控制器中store的时候, Request类的实例是什么时候传入的了, 我们并没有手动传入该对象实例;</p>
+<p>这便是依赖注入,Ioc容器和php反射来实现的;</p>
+<p>看下面的利用ioc容器技术来实现记录用户登录日志的例子:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">// 定义写日志的接口规范</span><br><span class="line">interface Log</span><br><span class="line">&#123;</span><br><span class="line">    public function write();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 文件记录日志</span><br><span class="line">class FileLog implements Log</span><br><span class="line">&#123;</span><br><span class="line">    public function write()</span><br><span class="line">    &#123;</span><br><span class="line">        echo 'file log write...' . PHP_EOL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 数据库记录日志</span><br><span class="line">class DatabaseLog implements Log</span><br><span class="line">&#123;</span><br><span class="line">    public function write()</span><br><span class="line">    &#123;</span><br><span class="line">        echo 'database log write...' . PHP_EOL;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class User</span><br><span class="line">&#123;</span><br><span class="line">    protected $fileLog;</span><br><span class="line">    protected $time;</span><br><span class="line">    protected $account;</span><br><span class="line"></span><br><span class="line">    public function __construct(Log $log, $account, $time)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;fileLog = $log;</span><br><span class="line">        $this-&gt;time = $time;</span><br><span class="line">        $this-&gt;account = $account;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function login()</span><br><span class="line">    &#123;</span><br><span class="line">        echo $this-&gt;account . ' login success... at ' . $this-&gt;time . PHP_EOL;</span><br><span class="line">        $this-&gt;fileLog-&gt;write();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Ioc</span><br><span class="line">&#123;</span><br><span class="line">    public $binding = [];</span><br><span class="line"></span><br><span class="line">    public function bind($abstract, $concrete)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;binding[$abstract]['concrete'] = function ($ioc, array $parameters) use ($concrete) &#123;</span><br><span class="line">            return $ioc-&gt;build($concrete, $parameters);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function make($abstract, $parameters = [])</span><br><span class="line">    &#123;</span><br><span class="line">        $concrete = $this-&gt;binding[$abstract]['concrete'];</span><br><span class="line">        return $concrete($this, $parameters);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function build($concrete, array $parameters)</span><br><span class="line">    &#123;</span><br><span class="line">        $reflector = new ReflectionClass($concrete); //https://www.php.net/manual/zh/book.reflection.php</span><br><span class="line">        $constructor = $reflector-&gt;getConstructor();</span><br><span class="line">        if (is_null($constructor)) &#123;</span><br><span class="line">            return $reflector-&gt;newInstance();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $dependencies = $constructor-&gt;getParameters();</span><br><span class="line">            $instances = $this-&gt;getDependencies($dependencies, $parameters);</span><br><span class="line">            return $reflector-&gt;newInstanceArgs($instances);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected function getDependencies($paramters, array $parameters)</span><br><span class="line">    &#123;</span><br><span class="line">        $dependencies = [];</span><br><span class="line">        foreach ($paramters as $paramter) &#123;</span><br><span class="line">            $class = $paramter-&gt;getClass()-&gt;name; //https://www.php.net/manual/en/reflectionparameter.getclass.php</span><br><span class="line">            if (is_null($class)) &#123;</span><br><span class="line">                $dependencies[] = array_shift($parameters);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                $dependencies[] = $this-&gt;make($class);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return $dependencies;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ioc = new Ioc();</span><br><span class="line">$ioc-&gt;bind('User', 'User');</span><br><span class="line">$ioc-&gt;bind('Log', 'FileLog');</span><br><span class="line">$user = $ioc-&gt;make('User', ['123@qq.com', date('Y-m-d H:i:s')]);</span><br><span class="line">$user-&gt;login();</span><br><span class="line"></span><br><span class="line">$ioc-&gt;bind('Log', 'DatabaseLog');</span><br><span class="line">$user = $ioc-&gt;make('User', ['456@qq.com', date('Y-m-d H:i:s')]);</span><br><span class="line">$user-&gt;login();</span><br></pre></td></tr></table></figure>
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/laravel-设计模式/" rel="tag"><i class="fa fa-tag"></i> laravel,设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/05/mysql幻读/" rel="next" title="mysql幻读">
+                <i class="fa fa-chevron-left"></i> mysql幻读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/26/bitmap-大数据存储/" rel="prev" title="bitmap-大数据存储">
+                bitmap-大数据存储 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -770,6 +859,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
 
   
 
@@ -785,6 +878,37 @@
 
   
 
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '8cbd2fe3d86c19086b3e',
+    clientSecret: '0e105dc3e6c886cf946113e4e6d7682b6bca6771',
+    repo: 'xiziyoung.github.io',
+    owner: 'xiziyoung',
+    admin: ['xiziyoung'],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
 
 
   
