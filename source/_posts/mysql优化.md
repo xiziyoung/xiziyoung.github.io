@@ -189,7 +189,7 @@ CREATE TABLE `user` (
 EXPLAIN SELECT * FROM `user` WHERE `country`='EN';
 EXPLAIN SELECT * FROM `user` WHERE `country`='EN' AND `work`='IT';
 EXPLAIN SELECT * FROM `user` WHERE `country`='EN' AND `work`='IT' ORDER BY `age` desc;
-   -- sql语句中的写法顺序好像没有关系,如下也可
+   -- sql语句中的写法顺序没有关系,如下也可
    EXPLAIN SELECT * FROM `user` WHERE age=50 AND `country`='EN' AND `work`='IT';
 
 -- (2).完全无法使用索引user_composite_index的情况
