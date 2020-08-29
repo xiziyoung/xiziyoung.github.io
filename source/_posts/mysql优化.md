@@ -150,21 +150,25 @@ EXPLAIN SELECT * FROM `user` where `sex`='男';
 <font color=yellow>所以在测试下面索引的用法时: 如果发现没有按照你的预期,出现了全表扫描, 请先看下是否是小表或者大表查询超过数据量的30%导致的; </font>    
 
 **索引优化常见注意事项:**  
-1. 查询经常用到的高频字段,用来连表的关联字段 最好建立上索引;       
+1. 查询经常用到的高频字段,用来连表的关联字段 最好建立上索引; 
+      
 2. 前导模糊查询不能命中索引;        
 例如: select * from test_table where name like '%XX'; 无法使用索引      
 而非前导模糊查询则可以：select * from test_table where name like 'XX%';     
+
 3. 负向条件查询不能命中索引     
 select * from test_table where age != 30;       
 包括 not in等;     
 not in/not exists都不是好习惯;(not exists比not in 好 , not exists可以走索引,避免不了负向查询就尽量用exists或者not exists);         
+
 4. 在进行查询时，索引列不能是表达式的一部分，也不能是函数的参数，否则无法使用索引。     
 explain select * from test_table where YEAR(date) < '2019';     
 即使date列有索引, 改查询也将无法命中索引;        
 类似的还有下面的这种神操作:      
 EXPLAIN SELECT * FROM `user` where age+1 = 49; 无法命中age索引;       
 233333
-计算尽量放到业务层完成,而非数据库层      
+计算尽量放到业务层完成,而非数据库层  
+    
 5. B-Tree索引中,复合索引(多列索引)**最左前缀**原则:           
 (说明:该项适用与B-Tree索引;哈希和其他类型的索引并不会像B-Tree一样按照顺序存储)     
 即索引key(field1, field2, field3),要想很好利用该索引,需要你的查询语句能使用到靠左的字段,将索引中从左起到右的字段 部分/全部 使用到查询语句中;         
@@ -239,7 +243,7 @@ mysql> EXPLAIN SELECT * FROM `user` where age >=70 and `work`='DOCTOR';
 通过查看filtered是否为100%来判断多列索引的利用情况
 ```
 
-6. 索引列的顺序           
+7. 索引列的顺序           
 让选择性最强的索引列放在前面。         
 索引的选择性是指：不重复的索引值和记录总数的比值。最大值为 1，此时每个记录都有唯一的索引与其对应。选择性越高，每个记录的区分度越高，查询效率也越高。     
 例如下面显示的结果中 customer_id 的选择性比 staff_id 更高，因此最好把 customer_id 列放在多列索引的前面。      
@@ -256,7 +260,7 @@ customer_id_selectivity: 0.0373
 ```
  
  
-7. 强制类型转换会全表扫描      
+8. 强制类型转换会全表扫描      
  例如:        
  ```sql
  -- 商品表中serial_number 类型为varchar(15),该列添加的有索引
@@ -290,14 +294,121 @@ customer_id_selectivity: 0.0373
  mysql> 
  ```
  
-8. 覆盖查询:        
+9. 覆盖查询:        
 仅使用索引树中的信息从表中检索列信息，而不必执行额外的搜索以读取实际行。        
 即索引包含所有需要查询的字段的值。       
 具有以下优点：     
 * 索引通常远小于数据行的大小，只读取索引能大大减少数据访问量。        
 * 一些存储引擎（例如 MyISAM）在内存中只缓存索引，而数据依赖于操作系统来缓存。因此，只访问索引可以不使用系统调用（通常比较费时）。       
 * 对于 InnoDB 引擎，若辅助索引能够覆盖查询，则无需访问主索引。            
- 
+
+
+10. 一个索引的题目:
+```sql
+CREATE TABLE `t` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `x` int(11) NOT NULL,
+  `y` int(11) NOT NULL,
+  `z` int(11) NOT NULL,
+  `w` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `x_y_z` (`x`,`y`,`z`)
+) ENGINE=InnoDB AUTO_INCREMENT=2038 DEFAULT CHARSET=utf8;
+-- 题目: 数据表如上,  下面哪些查询能用到索引x_y_z
+--(1) select * from t where where x=2002 and y=22 and z = 20; --用到索引x_y_z, 整个全用 
+
+--(2) select * from t where where x=2002 and y=22 and z like '%2'; --只使用到了索引x_y部分 
+
+--(3) select * from t where where x=2002 and y=22 and z like '2%'; --只使用到了索引x_y部分; 如果z字段为字符串类型(如varchar),则整个x_y_z都可以使用上; 
+
+--(4) select * from t where where x>=2002 and y=22 and z = 20; --只使用到了索引x部分 
+
+--(5) select * from t where where x=2002 and y>22 and z = 20; --只使用到了索引x_y部分 
+
+--(6) select * from t where where x=2002 and y=22 order by z; --用到索引x_y_z, 整个全用 
+mysql> EXPLAIN SELECT * FROM `t` where x=2002 and y=22 order by z;
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+-----------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref         | rows | filtered | Extra                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+-----------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 8       | const,const |   11 |   100.00 | Using index condition |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+-----------------------+
+1 row in set (0.05 sec)
+
+--(7) select * from t where where x=2002 order by y,z; -- 用到索引x_y_z, 整个全用 
+mysql> EXPLAIN SELECT * FROM `t` where x=2002 order by y,z;
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 4       | const |   72 |   100.00 | Using index condition |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+1 row in set (0.04 sec)
+
+--(8) select * from t where where x=2002 order by z,y; -- 只使用到了索引x部分; 因为排序中的顺序是z,y没有遵守左前缀 
+mysql> EXPLAIN SELECT * FROM `t` where x=2002 order by z,y;
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra                                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 4       | const |   72 |   100.00 | Using index condition; Using filesort |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+1 row in set (0.06 sec)
+-- 可以看到 Extra  中出现了 Using filesort
+
+--(9) select * from t where where x=2002 order by y asc, z desc; -- 只使用到了索引x_y部分; 因为排序中的y,z反向不一致, 一个正序, 一个倒序;
+mysql> explain select * from t where x=2002 order by y asc;
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 4       | const |   72 |   100.00 | Using index condition |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+-----------------------+
+1 row in set (0.08 sec)
+-- 
+mysql> explain select * from t where x=2002 order by y asc, z desc;
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra                                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 4       | const |   72 |   100.00 | Using index condition; Using filesort |
++----+-------------+-------+------------+------+---------------+-------+---------+-------+------+----------+---------------------------------------+
+1 row in set (0.08 sec)
+-- 可以看到 Extra  中出现了 Using filesort
+
+--(10) select * from t where where x=2002 and y=22 order by z,w; --只使用到索引x_y部分; 因为排序中还有额外的一列w不在索引中;
+mysql> EXPLAIN SELECT * FROM `t` where x=2002 and y=22 order by z,w;
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+---------------------------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref         | rows | filtered | Extra                                 |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+---------------------------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 8       | const,const |   11 |   100.00 | Using index condition; Using filesort |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+---------------------------------------+
+1 row in set (0.04 sec)
+-- 可以看到 Extra  中出现了 Using filesort
+
+--(11) EXPLAIN SELECT z FROM `t` where x=2002 and y=22 group by z;  --用到索引x_y_z, 整个全用 
+mysql> EXPLAIN SELECT z FROM `t` where x=2002 and y=22 group by z;
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref         | rows | filtered | Extra                    |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 8       | const,const |   11 |   100.00 | Using where; Using index |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+1 row in set (0.07 sec)
+
+--(12) EXPLAIN SELECT z FROM `t` where x=2002 and y=22 group by z;  --用到索引x_y_z, 整个全用 
+mysql> EXPLAIN SELECT z FROM `t` where x=2002 and y=22 group by z;
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+| id | select_type | table | partitions | type | possible_keys | key   | key_len | ref         | rows | filtered | Extra                    |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+|  1 | SIMPLE      | t     | NULL       | ref  | x_y_z         | x_y_z | 8       | const,const |   11 |   100.00 | Using where; Using index |
++----+-------------+-------+------------+------+---------------+-------+---------+-------------+------+----------+--------------------------+
+1 row in set (0.07 sec)
+
+--(13) SELECT z FROM `t` where x=2002 and y>22 group by z;  -- 只用到了索引x_y部分
+mysql> EXPLAIN SELECT z FROM `t` where x=2002 and y>22 group by z; 
++----+-------------+-------+------------+-------+---------------+-------+---------+------+------+----------+-------------------------------------------+
+| id | select_type | table | partitions | type  | possible_keys | key   | key_len | ref  | rows | filtered | Extra                                     |
++----+-------------+-------+------------+-------+---------------+-------+---------+------+------+----------+-------------------------------------------+
+|  1 | SIMPLE      | t     | NULL       | range | x_y_z         | x_y_z | 8       | NULL |    8 |   100.00 | Using where; Using index; Using temporary |
++----+-------------+-------+------------+-------+---------------+-------+---------+------+------+----------+-------------------------------------------+
+1 row in set (0.08 sec)
+-- 可以看到 Extra  中出现了 Using temporary
+```
  
  
  
@@ -332,6 +443,9 @@ mysql服务自身提供的有缓存系统,可以开启缓存;
 程序需要注意的是从哪个表读入,向哪个表更新;       
 
 垂直拆分：是把一个表的全部字段分别存储到不同的表里边。             
+
+分表方式: 方式一: 常规的关联id取模100来分表, 改方式较老旧, 不在一个子表的关联聚合等查询比较困难;
+         方式二: 使用mycat等工具;
 
 ### 清理数据碎片       
 ### 读写分离 
