@@ -38,7 +38,10 @@ class PostController extends Controller {
 
 这便是依赖注入,Ioc容器和php反射来实现的;
 
+**依赖注入**: 
+https://github.com/xiziyoung/Notes/blob/master/php-design-pattern/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5.md
 
+**IOC**
 看下面的利用ioc容器技术来实现记录用户登录日志的例子:
 ```sql
 <?php
