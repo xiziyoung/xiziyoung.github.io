@@ -2,7 +2,7 @@
 title: 消息队列之rabbitmq
 categories:
 - 设计模式
-date: 2019-02-26 22:15:10
+date: 2018-08-03 22:15:10
 tags:
 - rabbitmq,消息队列
 ---
