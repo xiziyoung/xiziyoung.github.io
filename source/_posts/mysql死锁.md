@@ -3,7 +3,6 @@ title: mysql死锁
 categories:
 - 数据库
 date: 2018-07-06 18:59:17
-updated: 2018-07-06 20:01:05
 tags:
 - mysql
 ---
