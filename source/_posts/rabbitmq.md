@@ -1,7 +1,7 @@
 ---
 title: 消息队列之rabbitmq
 categories:
-- 设计模式
+- 消息队列
 date: 2018-08-03 22:15:10
 tags:
 - rabbitmq,消息队列
